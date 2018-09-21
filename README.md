@@ -12,7 +12,7 @@ Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beis
 
 ### Vorbedingungen
 
-- Intrexx 8.1 Installation mit Online Update 05
+- Intrexx 8.1 Installation mit Online Update 05 oder Intrexx 18.09
 - Java JDK 1.8
 - Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
 
@@ -25,11 +25,13 @@ Die connector-api-examples.zip Datei kann in einen beliebigen Ordner (außerhalb
 Um den Quellcode kompilieren zu können, werden einige Intrexx sowie externe Bibliotheken benötigt. Diese sind in der Gradle Projektdatei `build.gradle` aufgeführt und werden normalerweise automatisch heruntergeladen. Sollte der Zugriff auf das United Planet Maven Repository nicht möglich sein, können die benötigten JAR-Dateien aus dem  `lib` Ordner der Intrexx Installation in den `lib` Ordner des Projekts kopiert werden.
 
 *Hinweis*
-Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05, das ab Oktober 2018 verfügbar sein wird. Es ist aber möglich, die Klassen mit Intrexx 8.1.3 zu kompilieren. In dem Fall muss in allen Java Dateien die import Anweisungen für folgende Packages geändert werden:
+Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05 oder 18.09, das ab Oktober 2018 verfügbar sein wird. Es ist aber möglich, die Klassen bis dahin mit Intrexx 8.1.3 zu kompilieren und zu verwenden. In dem Fall muss in allen Java Dateien die `import ...` Anweisungen für folgende Packages geändert werden:
 
 ```java
  de.uplanet.lucy.server.odata.connector.api.v1 -> de.uplanet.lucy.server.odata.connector.api
 ```
+
+Des Weiteren müssen in der `build.gradle` Projektdatei alle Versionsangaben `8.1.5` zu `8.1.3` geändert werden. Nach Release des OU05 bzw. 18.09 müssen diese Änderungen dann wieder rückgängig gemacht werden.
 
 ### Projekt kompilieren
 
@@ -217,11 +219,11 @@ In den Java Packages `de.uplanet.lucy.connectorapi.examples` befinden sich weite
 
 Im `docs/api` Verzeichnis des Projekts befinden sich die Java API Dokumentation der Intrexx Connector API. Darin werden alle wesentlichen Klassen und Interfaces beschrieben. Des Weiteren stehen zur Laufzeit alle Kontextobjekte (Session, Request, etc.) wie in Intrexx Groovy Skripten zur Verfügung.
 
-## Java Interfaces und Klassen der Connector API
+### Java Interfaces und Klassen der Connector API
 
 Die öffentlichen Schnittstellen und Klassen der Connector API befinden sich im Paket `de.uplanet.lucy.server.odata.connector.api.v1`. Im Folgenden werden die für eigene Connectoren zu implementierenden Methoden und bereitgestellte Hilfsklassen anhand des InMemory Beispiels beschrieben.
 
-### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorDataGroupAdapter`
+#### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorDataGroupAdapter`
 
 Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Fremddatengruppen.
 
@@ -236,14 +238,14 @@ Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Dele
 - `void delete(IConnectorRecord p_record)`
     Diese Methode dient zum Löschen eines bestehenden Datensatzes. Das `IConnectorRecord p_record` Argument enthält dabei die Datensatz-ID.
 
-### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorDataGroupAdapter`
+#### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorDataGroupAdapter`
 
 Von dieser abstrakten Klasse sollten alle konkreten IConnectorDataGroupAdapter-Implementierungen erben. Die Klasse stellt eine Reihe von Hilfsmethoden und Kontextobjekte zur Verfügung.
 
-### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorFileAdapter`
+#### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorFileAdapter`
 
 Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Dateifeldern. Diese können zu einer Intrexx Systemdatengruppe oder einer Fremddatengruppe gehören.
 
-### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorFileAdapter`
+#### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorFileAdapter`
 
 Von dieser abstrakten Klasse sollten alle konkreten IConnectorFileAdapter-Implementierungen erben. Die Klasse stellt eine Reihe von Hilfsmethoden und Kontextobjekte zur Verfügung.
