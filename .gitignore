@@ -1,0 +1,10 @@
+/.gradle/
+*.class
+.project
+.classpath
+/.settings/
+/bin/
+/.idea/
+/build/
+/lib/ix-*.jar
+*.pdf
