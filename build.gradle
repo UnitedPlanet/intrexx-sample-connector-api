@@ -6,7 +6,7 @@ targetCompatibility = 1.8
 
 
 group   = 'de.uplanet.lucy'
-version = '9.0.1'
+version = '8.1.5'
 
 
 repositories
@@ -41,9 +41,9 @@ dependencies
 	
 	implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.3.RELEASE'
 	
-    api group: 'de.uplanet.lucy', name: 'ix-common',              version: '9.0.1'
-    api group: 'de.uplanet.lucy', name: 'ix-server',              version: '9.0.1'
-    api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: '9.0.1'
+    api group: 'de.uplanet.lucy', name: 'ix-common',              version: '8.1.5'
+    api group: 'de.uplanet.lucy', name: 'ix-server',              version: '8.1.5'
+    api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: '8.1.5'
     
 	//api files("../../intrexx-8000-ou/modules/connector-office365/target/classes")
 	
@@ -59,7 +59,7 @@ jar {
         //from('src/main/resources/META-INF/MANIFEST.MF')
         attributes(
             'Specification-Title':    project.name,
-            'Specification-Version':  '9.0.1',
+            'Specification-Version':  '8.1.5',
             'Implementation-Title':   project.name,
             'Implementation-Version': version)
     }
