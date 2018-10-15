@@ -12,7 +12,7 @@ Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beis
 
 ### Vorbedingungen
 
-- Intrexx 8.1 Installation mit Online Update 05 oder Intrexx 18.09
+- Intrexx 18.09
 - Java JDK 1.8
 - Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
 
@@ -23,15 +23,6 @@ Die connector-api-examples.zip Datei kann in einen beliebigen Ordner (außerhalb
 ### Projektabhängigkeiten
 
 Um den Quellcode kompilieren zu können, werden einige Intrexx sowie externe Bibliotheken benötigt. Diese sind in der Gradle Projektdatei `build.gradle` aufgeführt und werden normalerweise automatisch heruntergeladen. Sollte der Zugriff auf das United Planet Maven Repository nicht möglich sein, können die benötigten JAR-Dateien aus dem  `lib` Ordner der Intrexx Installation in den `lib` Ordner des Projekts kopiert werden.
-
-*Hinweis*
-Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05 oder 18.09, das ab Oktober 2018 verfügbar sein wird. Es ist aber möglich, die Klassen bis dahin mit Intrexx 8.1.3 zu kompilieren und zu verwenden. In dem Fall muss in allen Java Dateien die `import ...` Anweisungen für folgende Packages geändert werden:
-
-```java
- de.uplanet.lucy.server.odata.connector.api.v1 -> de.uplanet.lucy.server.odata.connector.api
-```
-
-Des Weiteren müssen in der `build.gradle` Projektdatei alle Versionsangaben `8.1.5` zu `8.1.3` geändert werden. Nach Release des OU05 bzw. 18.09 müssen diese Änderungen dann wieder rückgängig gemacht werden.
 
 ### Projekt kompilieren
 
@@ -76,10 +67,9 @@ Um eigenen Java-Code zur Laufzeit in einem Intrexx Portal testen und debuggen zu
 -Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg
 -Xms256m
 -Xmx512m
--Xbootclasspath/p:../../lib/xsltc-hndl-fix.jar
 -Dde.uplanet.jdbc.trace=false
 -Dde.uplanet.lucy.server.odata.consumer.ssl.allowSelfSignedCerts=true
--Dlog4j.configuration=file:internal/cfg/log4j-console.properties
+-Dlog4j.configuration=file:internal/cfg/log4j2.xml
 ```
 
 - Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal`
@@ -213,7 +203,7 @@ Die Logik für den Datenzugriff ist in der Klasse `de.uplanet.lucy.connectorapi.
 
 ## Fortgeschrittene Connector Beispiele
 
-In den Java Packages `de.uplanet.lucy.connectorapi.examples` befinden sich weitere Beispiel Implementierungen, die den Zugriff auf echte REST Webservices via HTTP und OData aufzeigen. Dabei werden auch Intrexx Filter-, Sortierung- und Pagination-Funktionen verwendet. Weiterführende Dokumentationen dazu befinden sich im Unterverzeichnis `docs`.
+In den Java Packages `de.uplanet.lucy.connectorapi.examples` befinden sich weitere Beispiel Implementierungen, die den Zugriff auf REST Webservices via HTTP und OData aufzeigen. Dabei werden auch Intrexx Filter-, Sortierung- und Pagination-Funktionen verwendet. Weiterführende Dokumentationen dazu befinden sich im Unterverzeichnis `docs`.
 
 ## Java API Dokumentation
 
@@ -244,7 +234,7 @@ Von dieser abstrakten Klasse sollten alle konkreten IConnectorDataGroupAdapter-I
 
 #### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorFileAdapter`
 
-Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Dateifeldern. Diese können zu einer Intrexx Systemdatengruppe oder einer Fremddatengruppe gehören.
+Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Dateifeldern. Diese können zu einer Intrexx Datengruppe oder einer Fremddatengruppe gehören.
 
 #### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorFileAdapter`
 
