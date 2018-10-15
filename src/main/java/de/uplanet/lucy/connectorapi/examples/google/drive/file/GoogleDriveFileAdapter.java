@@ -33,7 +33,7 @@ import de.uplanet.lucy.server.odata.connector.api.v1.Field;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorField;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorRecord;
 import de.uplanet.lucy.server.odata.consumer.office365.Office365ConnectorException;
-import de.uplanet.lucy.server.portalserver.PortalServerPath;
+import de.uplanet.lucy.server.portalserver.PortalPath;
 import de.uplanet.lucy.server.property.IPropertyCollection;
 import de.uplanet.lucy.server.rtcache.FieldInfo;
 import de.uplanet.lucy.server.util.ContentTypeUtil;
@@ -197,7 +197,7 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		Preconditions.requireNonNullNonEmpty(l_strUrl, "Cannot get file URL.");
 
 		final File l_fileTmpDir;
-		l_fileTmpDir = IOHelper.createTempDirectory(PortalServerPath.get(PortalServerPath.TMP_DIR),
+		l_fileTmpDir = IOHelper.createTempDirectory(PortalPath.get(PortalPath.TMP_DIR).toFile(),
 													ContextSession.get().getId(), "_connector");
 
 		final Path l_p = l_fileTmpDir.toPath().resolve(l_vhf.getFileName());
