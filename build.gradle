@@ -11,6 +11,7 @@ targetCompatibility = 11
 group   = 'de.uplanet.lucy'
 version = '9.2.1'
 
+
 repositories
 {
 	jcenter()
