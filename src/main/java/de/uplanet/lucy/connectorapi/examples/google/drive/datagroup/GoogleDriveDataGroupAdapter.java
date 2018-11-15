@@ -73,7 +73,7 @@ public final class GoogleDriveDataGroupAdapter extends AbstractConnectorDataGrou
 
 	/**
 	 * Adds the metadata of a file to Google drive.
-
+	 * 
 	 * @return item id
 	 */
 	@Override

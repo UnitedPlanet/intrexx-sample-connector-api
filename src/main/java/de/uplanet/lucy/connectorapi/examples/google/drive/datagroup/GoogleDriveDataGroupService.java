@@ -35,6 +35,7 @@ import de.uplanet.lucy.server.odata.connector.api.v1.Field;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorField;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorRecord;
 import de.uplanet.lucy.server.odata.connector.api.v1.Record;
+import de.uplanet.util.Preconditions;
 
 
 public class GoogleDriveDataGroupService
@@ -235,25 +236,15 @@ public class GoogleDriveDataGroupService
 	@SuppressWarnings("unchecked")
 	public String updateMetaDataItem(HttpClient p_httpClient, IConnectorRecord p_record)
 	{
-		String l_id = null;
-		String l_name = null;
-		String l_description = null;
+		final String l_name = _extreactStringFieldValue(p_record, "name");
+		final String l_description = _extreactStringFieldValue(p_record, "description");
 
-		for (IConnectorField l_field : p_record.getFields())
-		{
-			if ("name".equalsIgnoreCase(l_field.getName()))
-			{
-				l_name = (String) l_field.getValue().getValue();
-			}
-			else if ("id".equalsIgnoreCase(l_field.getName()))
-			{
-				l_id = (String) l_field.getValue().getValue();
-			}
-			else if ("description".equalsIgnoreCase(l_field.getName()))
-			{
-				l_description = (String) l_field.getValue().getValue();
-			}
-		}
+		String l_id = _extreactStringFieldValue(p_record, "id");
+
+		if (l_id == null || l_id.isEmpty() || l_id.equals("-1"))
+			l_id = p_record.getId();
+
+		Preconditions.requireNonNullNonEmpty(l_id, "Record id must be set and not empty");
 
 		try
 		{
@@ -418,5 +409,28 @@ public class GoogleDriveDataGroupService
 		IOUtils.copy(l_inputStream, writer, "UTF-8");
 		String l_string = writer.toString();
 		return l_string;
+	}
+
+	private String _extreactStringFieldValue(IConnectorRecord p_record, String p_fieldName)
+	{
+		IConnectorField l_field;
+		try
+		{
+			l_field = p_record.getFieldByName(p_fieldName);
+		}
+		catch (Exception l_e)
+		{
+			return null;
+		}
+
+		if (l_field == null)
+			return null;
+
+		Object l_value = l_field.getValue().getValue();
+
+		if (l_value instanceof String)
+			return (String) l_value;
+
+		return null;
 	}
 }

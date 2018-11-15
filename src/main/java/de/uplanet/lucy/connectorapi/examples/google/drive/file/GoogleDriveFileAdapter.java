@@ -252,12 +252,12 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 			}
 
 			final String l_parentId = m_properties.getString(GOOGLE_DRIVE_CONSTANT.FOLDER_ID);
-			final String l_filename = ValueHolderHelper.getStringFromVH(
-					p_record.getFieldByGuid(m_properties.getString(GOOGLE_DRIVE_CONSTANT.NAME_GUID)).getValue());
+			final String l_filename = ValueHolderHelper.getStringFromVH(p_record.getFieldByName("name").getValue());
 
 			final GoogleDriveItem l_item = m_service.uploadFile(createHttpClient(), l_file, l_filename, l_parentId);
 
-			l_return.add(new Field(m_properties.getGuid(GOOGLE_DRIVE_CONSTANT.ITEM_ID), ValueHolderFactory.getValueHolder(l_item.getId())));
+			l_return.add(new Field(p_record.getFieldByName("id").getGuid(),
+			                       ValueHolderFactory.getValueHolder(l_item.getId())));
 		}
 		else
 		{
