@@ -137,7 +137,7 @@ The file must begin with the template name and ends with the id of the connector
         <property name="oauth2.clientSecret" value="####YOUR_CLIENT_SECRET####" description=""/>
         <property name="oauth2.scope.source" value="STATIC" description=""/>
         <property name="oauth2.scope" value="https://www.googleapis.com/auth/drive" description=""/>
-        <property name="oauth2.redirectUri" value="http://localhost:8082/office365/oauth2" description=""/>
+        <property name="oauth2.redirectUri" value="http://localhost:1337/service/oauth2/authorize" description=""/>
         <property name="oauth2.clientAuthenticationScheme" value="form" description=""/>
         <property name="oauth2.authenticationScheme" value="header" description=""/>
 
@@ -294,7 +294,7 @@ Replace:
         <property name="oauth2.clientSecret" value="###YOUR CLIENT SECRET###" description=""/>
         <property name="oauth2.scope.source" value="STATIC" description=""/>
         <property name="oauth2.scope" value="https://www.googleapis.com/auth/calendar" description=""/>
-        <property name="oauth2.redirectUri" value="http://localhost:8082/office365/oauth2" description=""/>
+        <property name="oauth2.redirectUri" value="http://localhost:1337/service/oauth2/authorize" description=""/>
         <property name="oauth2.clientAuthenticationScheme" value="form" description=""/>
         <property name="oauth2.authenticationScheme" value="header" description=""/>
         <property name="guid" value="testconnector_googlecalendar" description=""/>
@@ -388,3 +388,11 @@ If the datahander field in the foreign datagroup configuration dialog is empty t
 2. Go to `<INTREXX-INSTALL>/orgtempl/blank/internal/cfg/biaconfig` and copy the `bia_connector.cfg` file.
 3. Paste the `bia_connector.cfg` into your portal's `<INTREXX-PORTAL>/internal/cfg/biaconfig` folder.
 4. Restart the portal server.
+
+### 5.2 New Redirect URL since version 18.09
+
+Change the redirect URL from ```http://<portal>/oauth2``` to ```http://<portal>/service/oauth2/authorize```.
+
+Example:<br>
+v18.03: ```http://localhost:8082/test/oauth2```<br>
+v18.09: ```http://localhost:1337/service/oauth2/authorize```
