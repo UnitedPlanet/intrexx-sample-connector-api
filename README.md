@@ -72,20 +72,12 @@ Um eigenen Java-Code zur Laufzeit in einem Intrexx Portal testen und debuggen zu
 -Dlog4j.configuration=file:internal/cfg/log4j2.xml
 ```
 
-- Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal`
+- Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal` oder `C:\Program Data\intrexx\portal` unter Windows, unter Linux `/opt/intrexx/org/portal`.
 - Unter `Classpath -> User Entries -> Advanced -> Add external folder` den Ordner `<INTREXX_HOME>\lib\update` hinzufügen.
 - Unter `Classpath -> User Entries -> Add external jars` alle Jar-Dateien aus dem Ordner `<INTREXX_HOME>\lib` hinzufügen.
-- Unter `Environment -> New` eine neue Umgebungsvariable mit Namen `INTREXX_HOME` erstellen und als Value den Intrexx Installationsordner eintragen.
+- Unter `Environment -> New` eine neue Umgebungsvariable mit Namen `INTREXX_HOME` erstellen und als Value den Pfad zum Intrexx Installationsordner eintragen.
 - Konfiguration speichern.
-- Die Datei `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j.properties` zu `log4j-console.properties` kopieren und dort folgende Zeilen anpassen, um in Eclipse die Logausgaben in der Console zu erhalten:
-
-```bash
-# Set root logger level
-log4j.rootLogger=WARN, File, Console
-
-# Set United Planet logging level
-log4j.logger.de.uplanet=INFO, File, SysFifo, Console
-```
+- Optional: Die Datei `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j2.xml` zu `log4j2-console.xml` kopieren und darin die Logausgaben auf die Console mit ausgeben.
 
 Nun kann der Portalserver via Run/Debug in Eclipse/IntelliJ gestartet werden und Breakpoints in eigenem Code gesetzt werden. Wird zur Laufzeit ein Breakpoint erreicht, wird ab dieser Stelle der Debugger aktiviert.
 
