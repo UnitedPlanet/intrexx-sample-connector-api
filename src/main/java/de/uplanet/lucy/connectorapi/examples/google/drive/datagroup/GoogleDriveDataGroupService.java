@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
 import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.server.dataobjects.impl.ValueHolderFactory;
+import de.uplanet.lucy.server.dataobjects.impl.ValueHolderHelper;
 import de.uplanet.lucy.server.odata.connector.api.v1.Field;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorField;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorRecord;
@@ -236,10 +237,10 @@ public class GoogleDriveDataGroupService
 	@SuppressWarnings("unchecked")
 	public String updateMetaDataItem(HttpClient p_httpClient, IConnectorRecord p_record)
 	{
-		final String l_name = _extreactStringFieldValue(p_record, "name");
-		final String l_description = _extreactStringFieldValue(p_record, "description");
+		final String l_name = _extractStringFieldValue(p_record, "name");
+		final String l_description = _extractStringFieldValue(p_record, "description");
 
-		String l_id = _extreactStringFieldValue(p_record, "id");
+		String l_id = _extractStringFieldValue(p_record, "id");
 
 		if (l_id == null || l_id.isEmpty() || l_id.equals("-1"))
 			l_id = p_record.getId();
@@ -411,7 +412,7 @@ public class GoogleDriveDataGroupService
 		return l_string;
 	}
 
-	private String _extreactStringFieldValue(IConnectorRecord p_record, String p_fieldName)
+	private String _extractStringFieldValue(IConnectorRecord p_record, String p_fieldName)
 	{
 		IConnectorField l_field;
 		try
@@ -426,11 +427,6 @@ public class GoogleDriveDataGroupService
 		if (l_field == null)
 			return null;
 
-		Object l_value = l_field.getValue().getValue();
-
-		if (l_value instanceof String)
-			return (String) l_value;
-
-		return null;
+		return ValueHolderHelper.getStringFromVH(l_field.getValue());
 	}
 }
