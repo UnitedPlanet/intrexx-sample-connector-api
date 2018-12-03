@@ -39,12 +39,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 
+import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
+import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.odata.ODATA_CONSTANT;
 import de.uplanet.lucy.odata.ODataAuth;
 import de.uplanet.lucy.odata.ODataAuthHolder;
 import de.uplanet.lucy.server.ContextSession;
-import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
-import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.server.file.action.IOperationFile;
 import de.uplanet.lucy.server.session.ISession;
 import de.uplanet.util.Preconditions;
@@ -54,7 +54,7 @@ public class GoogleDriveFileService
 {
 	private static final String ms_rootUri = "https://www.googleapis.com/drive/v3/files/";
 
-	private static final String ms_folderMimeType = "application/vnd.google-apps.folder";
+	public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 	private static final int ONE_MB = 1024 * 1024;
 
 	private final GoogleDriveJSONParser m_googleDriveParser = new GoogleDriveJSONParser();
@@ -63,7 +63,10 @@ public class GoogleDriveFileService
 	 * Creates folders. For creating main folders use parentFolderId = 'root'
 	 * @return {@link GoogleDriveItem}
 	 */
-	public GoogleDriveItem createFolder(HttpClient p_httpClient, String p_parentId, String p_folderName)
+	public GoogleDriveItem createItem(HttpClient p_httpClient,
+	                                  String     p_parentId,
+	                                  String     p_folderName,
+	                                  String     p_mimeType)
 		throws RuntimeException
 	{
 		String l_parameter = "?fields=" + GoogleDriveItem.FIELDS;
@@ -71,7 +74,7 @@ public class GoogleDriveFileService
 
 		try
 		{
-			StringEntity entity = new StringEntity(_getDriveItemJSON(p_folderName, p_parentId, ms_folderMimeType));
+			StringEntity entity = new StringEntity(_getDriveItemJSON(p_folderName, p_parentId, p_mimeType));
 
 			HttpUriRequest l_request = RequestBuilder.post(l_deleteURI).setEntity(entity).build();
 			String l_jsonString = _getStringFromResponse(p_httpClient.execute(l_request));
@@ -473,7 +476,7 @@ public class GoogleDriveFileService
 	public int getFileCount(HttpClient p_httpClient, String p_parentId)
 	{
 		final String l_parameters = String.format("?q=mimeType != '%s' and '%s' in parents",
-		                                          ms_folderMimeType,
+		                                          FOLDER_MIME_TYPE,
 		                                          p_parentId);
 
 		final URI l_uri = URI.create(String.format("%sfiles%s&fields=files(%s)",
