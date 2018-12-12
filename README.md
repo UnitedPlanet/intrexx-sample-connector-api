@@ -116,9 +116,6 @@ Neue Connectoren definieren eine Template Datei unter `org\<portal>\internal\cfg
     <description>Configuration template for the InMemory test connector.</description>
     <connectorId>inmemory</connectorId>
     <properties>
-        <property name="serviceTimeout" value="0" description=""/>
-        <property name="serviceRootURI" value="" description=""/>
-        <property name="useSSL" value="false" description=""/>
     </properties>
     <userMappings>
     </userMappings>
