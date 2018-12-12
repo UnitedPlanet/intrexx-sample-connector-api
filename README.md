@@ -135,9 +135,6 @@ New connectors define a template file under `org\<portal>\internal\cfg\odata\con
     <description>Configuration template for the InMemory test connector.</description>
     <connectorId>inmemory</connectorId>
     <properties>
-        <property name="serviceTimeout" value="0" description=""/>
-        <property name="serviceRootURI" value="" description=""/>
-        <property name="useSSL" value="false" description=""/>
     </properties>
     <userMappings>
     </userMappings>
