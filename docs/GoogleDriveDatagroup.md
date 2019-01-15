@@ -3,11 +3,11 @@
 This document explains how you can use the Connector API to develop your own connectors for Intrexx.
 This example shows how to consume a REST API (Google Drive) using the Connector API.
 
-## The Gradle Project
+## Gradle project
 
-Clone the project and add it into your favourite IDE as gradle project.
+Clone the project and add it to your preferred IDE as a Gradle project.
 
-## The adapter class
+## Adapter class
 
 1. Create your own package.
 2. Create your own `GoogleDriveDataGroupAdapter` class.
@@ -18,13 +18,13 @@ This class must extend the `AbstractConnectorDataGroupAdapter` class.
 
 #### AbstractConnectorDataGroupAdapter class
 
-The `AbstractConnectorDataGroupAdapter` class implements useful methods like:
+The `AbstractConnectorDataGroupAdapter` class implements useful methods such as:
 
-* createHTTPClient: This method generates a HTTP client where the OAuth2 and other authentication protocols can be configured in the connector configuration XML.
+* createHTTPClient: This method generates an HTTP client where the OAuth2 and other authentication protocols can be configured in the connector configuration XML.
 * getConnectorGuid: Returns the GUID of your connector.
-* createODataV2Client: This method creates an ODataV2 client where the OAuth2 and other authentication protocols can be configured over the connector configuration XML.
-* createODataV4Client: This method creates an ODataV4 client where the OAuth2 and other authentication protocols can be configured over the connector configuration XML.
-* createHttpClient: This method creates an Apache HTTP lient where required authentication protocols can be configured over the connector configuration XML.
+* createODataV2Client: This method creates an ODataV2 client where the OAuth2 and other authentication protocols can be configured with the connector configuration XML.
+* createODataV4Client: This method creates an ODataV4 client where the OAuth2 and other authentication protocols can be configured with the connector configuration XML.
+* createHttpClient: This method creates an Apache HTTP client where required authentication protocols can be configured with the connector configuration XML.
 * getProperties: Returns a collection of properties from the expert settings of your data group.
 * getImpersonationGuid: Returns the GUID of an impersonation user.
 * getDataGroupGuid: Returns the GUID of your data group.
@@ -41,11 +41,11 @@ The Connector API defines the following CRUD methods you can implement:
 
 #### queryDataRange method
 
-This method shall return a collection of records. The return object is of type `IConnectorQueryResult`. It contains a list of records, the count of records in the list and the total count of records the external API can return.
+This method returns a collection of records. The return object is of type `IConnectorQueryResult`. It contains a list of records, the count of records in the list and the total count of records the external API can return.
 
-The count and total count is needed for the pagination control. With the method of the abstract class we create a HTTP client. This client performs the OAuth2 authentication to the Google service, if the connector is configured correctly. See the quick start guide for more details.
+The count and total count is needed for the pagination control. With the abstract class method, we create an HTTP client. This client performs the OAuth2 authentication to the Google service, if the connector is configured correctly. See the quick start guide for more details.
 
-The request method is extracted into a separate service class. For the request we need the GoogleDrive parent id (the item id of the parent folder). This id comes from an expert flag in the data group. With getProperties() we get access to all expert flags of the data group.
+The request method is extracted into a separate service class. For the request we need the Google Drive parent ID (the item ID of the parent folder). This ID comes from an expert flag in the data group. With getProperties() we get access to all expert flags of the data group.
 
 With getFields we get all the data fields we have to provide values for.
 
@@ -67,7 +67,7 @@ With getFields we get all the data fields we have to provide values for.
 
 ### queryDataRecord() method
 
-This method will be called if Intrexx requests a single record. The implementation will call the Google Drive API and returns an `IConnectorRecord` object.
+This method will be called if Intrexx requests a single record. The implementation will call the Google Drive API and return an `IConnectorRecord` object.
 
 ```Java
 	@Override
@@ -81,7 +81,7 @@ This method will be called if Intrexx requests a single record. The implementati
 
 ### insert() method
 
-The insert method is called after the insert method of the file adapter created a drive item. Afterwards this method will add the metadata to the drive item.
+This method is called once the insert method of the file adapter has created a drive item. This method will subsequently add the metadata to the drive item.
 
 ```Java
 	@Override
