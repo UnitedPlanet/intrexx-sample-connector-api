@@ -26,7 +26,7 @@ The connector-api-examples.zip file can be unzipped into any folder (outside of 
 To be able to compile the source code, some Intrexx and external libraries are required. These are listed in the Gradle project file `build.gradle` and are normally downloaded automatically. If it is not possible to connect to the United Planet Maven Repository, the required JAR files can be copied from the `lib` of the Intrexx installation to the `lib` folder of the project.
 
 *Please note*:
-Compiling the Java source code files requires at least Intrexx 18.03 OU 05 or 18.09, which was released in October 2018. The branch `v18.09` should be used for Intrexx 18.09. 
+Compiling the Java source code files requires at least Intrexx 18.03 OU 05 or 18.09, which was released in October 2018. The branch `v18.09` in this repository should be used for Intrexx 18.09.
 
 ### Compile project
 
