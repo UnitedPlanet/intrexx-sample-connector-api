@@ -6,7 +6,7 @@ targetCompatibility = 1.8
 
 
 group   = 'de.uplanet.lucy'
-version = '9.0.5'
+version = '9.0.7'
 
 repositories
 {
@@ -40,9 +40,9 @@ dependencies
 	
 	implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.3.RELEASE'
   
-  api group: 'de.uplanet.lucy', name: 'ix-common',              version: '9.0.5'
-  api group: 'de.uplanet.lucy', name: 'ix-server',              version: '9.0.5'
-  api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: '9.0.5'
+  api group: 'de.uplanet.lucy', name: 'ix-common',              version: version
+  api group: 'de.uplanet.lucy', name: 'ix-server',              version: version
+  api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: version
     
 	testImplementation group: 'org.easymock',      name: 'easymock',             version: '3.5.1'
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api',    version: '5.0.2'
@@ -56,7 +56,7 @@ jar {
         //from('src/main/resources/META-INF/MANIFEST.MF')
         attributes(
             'Specification-Title':    project.name,
-            'Specification-Version':  '9.0.5',
+            'Specification-Version':  version,
             'Implementation-Title':   project.name,
             'Implementation-Version': version)
     }

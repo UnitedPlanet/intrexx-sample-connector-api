@@ -1,32 +1,33 @@
-# Intrexx Connector API Quick Start
+# Intrexx Connector API - Quick start guide
 
-## Einführung
+## Introduction
 
-Die Intrexx Connector API definiert eine Java API, um eigene Intrexx Connectoren zu implementieren, die externe Daten in Intrexx über eine Fremddatengruppe bereitstellen. Dabei gibt die API im Wesentlichen zwei Java Interfaces vor, die vom Entwickler zu implementieren sind und Datensätze und Dateien im externen System erstellen, lesen, aktualisieren und löschen (sog. CRUD Aktionen). Des Weiteren wird in der Connector Konfigurationsdatei ein Metadaten-Modell hinterlegt, das die Struktur der Datengruppen (Felder, Beziehungen, Settings) beschreibt, die von der Connector Implementierung bereitgestellt werden. Zur Laufzeit bietet die Connector-API vorkonfigurierte Klienten für HTTP und OData Anfragen, welche automatisch eine Authentifizierung des Benutzers - sofern vom Service benötigt - via HTTP Basic Auth oder OAuth2 durchführen. Ansonsten lassen sich beliebige Java Bibliotheken (z.B. JDBC, REST APIs, etc.) im eigenen Code verwenden.
+The Intrexx Connector API defines a Java API to implement custom Intrexx connectors that provide external data in Intrexx via an external data group. In principle, the API specifies two Java interfaces, which should be implemented by developers to create, read, update and delete data records and files in the external system (so-called CRUD actions). Furthermore, a metadata model is stored in the connector configuration file. This describes the structure of the data groups (fields, relationships, settings) that are provided by the connector implementation. At runtime, the Connector API provides preconfigured clients for HTTP and OData requests, which automatically perform a user authentication - if it is required by the service - via HTTP Basic Auth or OAuth2. Otherwise, any Java library (e.g. JDBC, REST APIs etc.) can be used in custom code.
 
-Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beispiel-Implementierungen beschrieben, die den Einsatz der API zur Anbindung von Fremdsystemen in Intrexx verdeutlichen.
+To make a quick start into development with the connector, the following provides a description of example implementations that demonstrate the use of the API for integrating external systems in Intrexx.
 
-*HINWEIS*: Die API befindet sich derzeit noch in einer Preview-Version. Bitte beachten Sie, dass diese für produktive Einsätze noch nicht freigegeben ist und sich bis zur finalen Freigabe noch Änderungen an der API ergeben können, die in eigenen Projekten nachgezogen werden müssen. Diese Anpassungen sollten aber nur geringfügig ausfallen.
+*Please note*:
+The API is currently still in the preview stage. Please be aware that this has not been released for productive implementation and that changes may be made to the API before the final release. These changes may need to be applied to custom projects. However, these adjustments should only be minor.
 
-## Einrichtung der Entwicklungsumgebung
+## Configure the development environment
 
-### Vorbedingungen
+### Requirements
 
 - Intrexx 18.09
 - Java JDK 1.8
-- Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
+- Optionally, an IDE such as Eclipse Java IDE or IntelliJ IDEA is recommended for developing custom connectors
 
-### Projektordner anlegen
+### Create project folder
 
-Die connector-api-examples.zip Datei kann in einen beliebigen Ordner (außerhalb Intrexx) entpackt werden. Im Folgenden wird davon ausgegangen, dass der Projektornder `connector-api-examples` heißt.
+The connector-api-examples.zip file can be unzipped into any folder (outside of Intrexx). In the following it is assumed that the project folder is called `connector-api-examples`.
 
-### Projektabhängigkeiten
+### Project dependencies
 
-Um den Quellcode kompilieren zu können, werden einige Intrexx sowie externe Bibliotheken benötigt. Diese sind in der Gradle Projektdatei `build.gradle` aufgeführt und werden normalerweise automatisch heruntergeladen. Sollte der Zugriff auf das United Planet Maven Repository nicht möglich sein, können die benötigten JAR-Dateien aus dem  `lib` Ordner der Intrexx Installation in den `lib` Ordner des Projekts kopiert werden.
+To be able to compile the source code, some Intrexx and external libraries are required. These are listed in the Gradle project file `build.gradle` and are normally downloaded automatically. If it is not possible to connect to the United Planet Maven Repository, the required JAR files can be copied from the `lib` of the Intrexx installation to the `lib` folder of the project.
 
-### Projekt kompilieren
+### Compile project
 
-Das Projekt wird mit Gradle [](http://gradle.io) verwaltet und kompiliert. Folgende Befehle können direkt im Hauptordner des Projekts ausgeführt werden:
+The project is managed and compiled with [Gradle](http://gradle.org). The following commands can be performed directly in the main folder of the project:
 
 Windows:
 
@@ -46,19 +47,19 @@ Linux/MacOS
 
 #### Eclipse
 
-Eclipse starten und prüfen, dass das Gradle Plugin installiert ist. Anschließend über `File->Import->Gradle` den Projektordner in den Workspace importieren. Das Projekt sollte anschließend im Package Explorer verfügbar sein.
+Start Eclipse and check that the Gradle plugin is installed. Afterwards, import the project file to the workspace via `File -> Import -> Gradle`. The project should then be available in the Package Explorer.
 
 #### IntelliJ
 
-IntelliJ bietet von Haus aus Unterstützung für Gradle Projekte. Das Projekt kann einfach über den Öffnen Dialog importiert werden, in diesem ist das Projektverzeichnis auszuwählen.
+IntelliJ inherently provides support for Gradle projects. The project can easily be imported via the Open dialog by selecting the project directory.
 
-### Portalserver im Debug Modus starten
+### Start the portal server in debug mode
 
-Um eigenen Java-Code zur Laufzeit in einem Intrexx Portal testen und debuggen zu können, lässt sich der Portalserver in Eclise/IntelliJ im Debug-Modus ausführen. Voraussetzung dafür ist, dass Intrexx und das Intrexx Portal auf dem lokalen PC wie die Entwicklungsumgebung installiert sind und der Portalserver Dienst zuvor beendet wurde. Es folgt die Einrichtung der Run Configuration für den Portalserver in Eclipse, in IntelliJ können dieselben Angaben verwendet werden:
+To be able to test and debug custom Java code in an Intrexx portal at runtime, the portal server can be executed in the debug mode in Eclipse/IntelliJ. To do this, Intrexx and the Intrexx portal need to be installed on the same local PC as the development environment, and the portal server service needs to have been stopped. How the run configuration for the portal server can be set up in Eclipse is described below - the same specifications can be made in IntelliJ:
 
-- Unter Run->Run Configurations eine neue Java Application erstellen, Name 'Portalserver'.
-- Unter 'Main Class' die Klasse `de.uplanet.lucy.server.portalserver.PortalService` eintragen.
-- Unter 'Arguments' im Feld 'VM Arguments' folgende Parameter hinzufügen (für Linux ist java.library.path entsprechend anzupassen):
+- Create a new Java application called 'Portalserver' via `Run -> Run Configurations`.
+- Enter the class `de.uplanet.lucy.server.portalserver.PortalService` as the 'Main Class'.
+- Add the following parameter in the field 'VM Arguments' under 'Arguments' (adjust java.library.path accordingly for Linux):
 
 ```bash
 -ea
@@ -72,41 +73,41 @@ Um eigenen Java-Code zur Laufzeit in einem Intrexx Portal testen und debuggen zu
 -Dlog4j.configuration=file:internal/cfg/log4j2.xml
 ```
 
-- Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal` oder `C:\Program Data\intrexx\portal` unter Windows, unter Linux `/opt/intrexx/org/portal`.
-- Unter `Classpath -> User Entries -> Advanced -> Add external folder` den Ordner `<INTREXX_HOME>\lib\update` hinzufügen.
-- Unter `Classpath -> User Entries -> Add external jars` alle Jar-Dateien aus dem Ordner `<INTREXX_HOME>\lib` hinzufügen.
-- Unter `Environment -> New` eine neue Umgebungsvariable mit Namen `INTREXX_HOME` erstellen und als Value den Pfad zum Intrexx Installationsordner eintragen.
-- Konfiguration speichern.
-- Optional: Die Datei `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j2.xml` zu `log4j2-console.xml` kopieren und darin die Logausgaben auf die Console mit ausgeben.
+- Specify the path to the portal directory, e.g. `C:\intrexx\org\portal`, under 'Working directory'.
+- Add the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
+- Add all JAR files from the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
+- Create a new environment variable called `INTREXX_HOME` under `Environment -> New` and enter the Intrexx installation folder as the value.
+- Save the configuration.
+- Copy the file `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j2.xml` to `log4j2-console.xml` and adjust it to receive log outputs in the console in Eclipse.
 
-Nun kann der Portalserver via Run/Debug in Eclipse/IntelliJ gestartet werden und Breakpoints in eigenem Code gesetzt werden. Wird zur Laufzeit ein Breakpoint erreicht, wird ab dieser Stelle der Debugger aktiviert.
+The portal server can now be started via Run/Debug in Eclipse/IntelliJ and breakpoints can be set in custom code. If a breakpoint is reached at runtime, the debugger is activated as of this point.
 
-## Connector Beispiel-Implementierungen
+## Example connector implementations
 
-Das Projekt enthält drei Beispiele für den Zugriff auf
+The project contains three examples for accessing
 
-- Google Kalender und Google Drive
-- MS Office365 Termine
+- Google Calendar and Google Drive
+- MS Office365 appointments
 - SonarQube
 
-Die Beispiele für Google und Office365 benötigen eine OAuth2 Konfiguration für die Authentifizierung am Service im Intrexx Portal. Wie diese einzurichten ist, wird in der [Intrexx Online-Hilfe](http://up-download.de/up/docs/intrexx-onlinehelp/8100/de/index.html?p=helpfiles/help.2.connectoren-office-365.html) beschrieben.
+The examples for Google and Office365 require an OAuth2 configuration for authenticating to the service in the Intrexx portal. A description of how this can be configured is available in the [Intrexx Online Help](http://up-download.de/up/docs/intrexx-onlinehelp/8100/en/index.html?p=helpfiles/help.2.connectoren-office-365.html).
 
-## Eigenes Connector Projekt erstellen
+## Create a custom connector project
 
-Eigene Connectoren können direkt innerhalb des Beispiel-Projekts entwickelt werden oder es wird eine Kopie des Projektordners erstellt, der Java Quellcode unter /src/main/java gelöscht und eigene Klassen darunter erstellt. Im Folgenden wird Schritt für Schritt die Erstellung eines eigenen Connectors beschrieben.
+Custom connectors can be developed directly within the example project or you can create a copy of the project folder, delete the Java source code under /src/main/java and create custom classes instead. The following provides a step-by-step description of how to create a custom connector.
 
-*Hinweis*: Sollte die Entwicklung auf Basis eines bereits bestehenden Portals erfolgen, so ist zu prüfen, ob diese beiden Dateien sich bereits im Portalverzeichnis befinden. Ansonsten müssen diese aus dem jeweiligen Ordner unter `<INTREXX_HOME>/orgtempl/...` in alle Portale kopiert werden.
+*Please note*: If you are developing on the basis of an existing portal, you need to check whether both of these files are already in the portal directory. Otherwise, these need to be copied from the respective folder under `<INTREXX_HOME>/orgtempl/...` to all portals.
 
-- org\<portal>\internal\cfg\biaconfig\bia-connector.cfg
-- org\<portal>\internal\cfg\odata\connector\template\msoffice365.xml
+- `org\<portal>\internal\cfg\biaconfig\bia-connector.cfg`
+- `org\<portal>\internal\cfg\odata\connector\template\msoffice365.xml`
 
-### InMemory Connector Beispiel
+### InMemory connector example
 
-Das InMemory Connector Beispiel bietet den Zugriff auf eine interne Datenstruktur über eine Intrexx Fremddatengruppe. Dabei werden alle CRUD Aktionen sowie Sortierung unter Pagination unterstützt.
+The InMemory connector example provides access to an internal data structure via an Intrexx external data group. In this case, all CRUD actions as well as sorting under pagination are supported.
 
-#### Connector Konfiguration
+#### Connector configuration
 
-Neue Connectoren definieren eine Template Datei unter `org\<portal>\internal\cfg\odata\connector\template\`. Als Dateiname sollte ein Connector Bezeichner gewählt werden. Legen Sie in dem Ordner eine neue Datei inmemory.xml an und kopieren Sie diesen Inhalt in die Datei:
+New connectors define a template file under `org\<portal>\internal\cfg\odata\connector\template\`. Create a new file called 'inmemory.xml' in the folder and copy the content below into the file:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -130,6 +131,7 @@ Neue Connectoren definieren eine Template Datei unter `org\<portal>\internal\cfg
                     <field name="Text" typeName="text" primaryKey="false" />
                     <field name="DateTime" typeName="datetime" primaryKey="false" />
                     <field name="Boolean" typeName="boolean" primaryKey="false" />
+                    <field name="Integer" typeName="integer" primaryKey="false" />
                 </fields>
                 <settings>
                     <setting key="connector.cfg.guid" value=""/>
@@ -143,11 +145,11 @@ Neue Connectoren definieren eine Template Datei unter `org\<portal>\internal\cfg
 </connector>
 ```
 
-Der wesentliche Abschnitt im Connector-Template befindet sich unter `<metaData>`. Hier werden die Datengruppen, Felder und Expert Settings definiert, die der Connector für Fremddatengruppen in Intrexx bereitstellt. Es können beliebig viele Datengruppen und Felder definiert werden. Weiterhin können auch Dateifelder für den Datei-Upload/Download definiert werden, worauf hier nicht eingegangen wird, da es den Rahmen dieses Quick Starts überschreiten würde.
+The most important section in the connector template is under `<metaData>`. The data groups, fields and expert settings, which the connector provides for external data groups in Intrexx, are defined here. Any number of data groups and fields can be defined here. Additionally, file fields for uploading/downloading files can be defined here, but this won't be looked at here as this would exceed the purpose of this quick start guide.
 
-In diesem Beispiel wird eine Datengruppe mit 7 Feldern für die jeweils möglichen Intrexx Datentypen erstellt. Zusätzlich ist anzugeben, ob das Feld Teil des Primary Keys ist.
+In this example, a data group is created with 7 fields for each of the possible Intrexx data types. In addition, you can also specify whether a field is part of the primary key.
 
-Auf Basis dieses Templates können nun konkrete Connector-Konfigurationen in Intrexx registriert werden. Dadurch ist es möglich, unterschiedliche Services mit denselben Metadaten aber unterschiedlicher Konfiguration anzulegen. Dazu kopieren Sie die Datei nach `org\<portal>\internal\cfg\odata\connector` und benennen Sie um nach `inmemory_test.xml`. Der erste Teil des Namens vor dem Unterstrich bezeichnet die Connector ID (siehe oben `<connectorId>`), der zweite Teil ist der Name dieser konkreten Konfiguration (hier `test`). Öffnen Sie die Datei dann in einem Editor und ergänzen Sie `<guid>` und  `<name>` wie folgt (GUID muss in allen Dateien eindeutig sein:
+Based on this template, specific connector configurations can now be registered in Intrexx. This means it is possible to create different services with the same metadata but different configurations. Copy the file to `org\<portal>\internal\cfg\odata\connector` and rename it to `inmemory_test.xml`. The first part of the name before the underscore refers to the connector ID (see above `<connectorId>`), the second part is the name of the specific configuration (`test` in this case). Open the file in an editor of your choice and add the following to `<guid>` and `<name>` as follows (GUID must be unique in all files):
 
 ```xml
 <guid>F27302911D5DA4E8FE7A500D3F4E1E699BDF0592</guid>
@@ -158,73 +160,73 @@ Auf Basis dieses Templates können nun konkrete Connector-Konfigurationen in Int
 ...
 ```
 
-Starten Sie anschließend den Portalserver neu.
+Afterwards, restart the portal service.
 
-#### Intrexx Applikation
+#### Intrexx application
 
-Als nächstes kann bereits eine Applikation in Intrexx erstellt werden, die diesen Connector verwendet.
+Next, you can already create an application in Intrexx that uses this connector.
 
-- Legen Sie dazu eine neue 'Leere Applikation' im Anwendungsdesigner an und löschen Sie die Datengruppe 'Datengruppe'.
-- Erstellen Sie eine neue Fremddatengruppe mit Namen 'InMemory'.
-- Unter 'Datenbankverbindung' wählen Sie den Eintrag `inmemory_test`, unter Datahandler sollte nun 'Connector API - Datenhandler' stehen.
-- Klicken Sie neben dem 'Tabellen'-Feld auf das Lupen-Symbol und suchen Sie nach allen Tabellen mit '*'. Es sollte eine Tabelle `CONNECTOR_API.MyDataGroup` erscheinen. Wählen Sie diese aus.
-- Klicken Sie nun auf der Registerkarte 'Datenfelder' auf das `+` Symbol und wählen alle Felder aus.
-- Wechseln Sie nun auf die Registerkarte Expert und dort auf Settings. Legen Sie folgende zwei neue Settings an:
+- Start by creating a new 'Empty Application' in the Applications module and delete the 'Data Group' data group.
+- Create a new external data group called 'InMemory'.
+- Under 'Database connection', select the entry `inmemory_test`. 'Connector API - Datahandler' should now appear under 'Data handler'.
+- Click on the magnifying glass symbol next to the 'Table' field and search for all tables with '*'. A table called `CONNECTOR_API.MyDataGroup` should appear. Select this table.
+- Now, click on the 'Data fields' tab and click on the `+` symbol. Select every field in the subsequent dialog.
+- Next, switch to the 'Expert' tab and then to 'Settings'. Create the following two settings:
 
 ```properties
 connector.cfg.guid = inmemory_test
 connector.dataGroup.adapter.class =	de.uplanet.lucy.connectorapi.examples.simple.InMemoryDataGroupConnector
 ```
 
-- Schließen Sie dann den Datengruppendialog mit 'OK'.
-- Nun kann auf der Ansichtsseite der Applikation eine neue Ansichtsstabelle erstellt werden, die alle Felder der Datengruppe beinhaltet.
-- Veröffentlichen Sie die Applikation und rufen Sie sie im Portal auf. Es wird ein Fehler erscheinen, da die Adapter Klasse noch nicht gefunden wird.
+- Close the data group dialog by clicking on 'OK'.
+- Now, a view table can be created on the view page of the application. This table should contain all fields of the data group.
+- Publish the application and open it in the portal. An error will occur because the adapter class is not yet found.
 
-*Hinweis*: Die App befindet sich auch als Import-Paket im Projektverzeichnis unter `docs/InMemoryConnector.lax` und kann so direkt in Intrexx importiert werden.
+*Please note*: The app is also available as an import package in the project folder under `docs/InMemoryConnector.lax`, this can be imported directly into Intrexx.
 
-#### Projekt in Intrexx einbinden
+#### Integrate the project in Intrexx
 
-Damit eigene Connector Klassen zur Laufzeit im Portalserver gefunden werden, muss die Jar-Datei des Projekts in den Intrexx Classpath aufgenommen werden. Am einfachsten geschieht dies, wenn direkt nach Aufruf von `gradlew.bat jar` die Datei unter `build\libs\connector-examples-8.1.3.jar` nach `<INTREXX_HOME>\lib` kopiert wird. Danach muss der Portalserver Dienst neu gestartet werden. Nach dem Neustart und Aufruf der Applikation im Portal sollten drei Datensätze in der Tabelle aufgelistet werden. Diese können geändert, gelöscht oder neu erstellt werden.
+So that custom connector classes are found in the portal server at runtime, the JAR file of the project needs to be included in the Intrexx classpath. The easiest way to achieve this is if the file `build\libs\connector-examples-9.1.5.jar` is copied to `<INTREXX_HOME>\lib` directly after the call of `gradlew.bat jar`. The portal server needs to be restarted afterwards. After the restart, three data records should be listed in the table when you open the application in the browser. These can be modified or deleted, or new records can be created.
 
-#### Connector Klassen Implementierung
+#### Implement connector classes
 
-Die Logik für den Datenzugriff ist in der Klasse `de.uplanet.lucy.connectorapi.examples.simple.InMemoryDataGroupConnector` implementiert. Darin werden die Anhand der übergebenen Abfrage-Parameter die Daten ermittelt und in die Connector API Datenstrukturen überführt bzw. bei Inserts/Updates die Werte aus den Intrexx Objekten in der Tabelle gespeichert.
+The logic for the data access is implemented in the class `de.uplanet.lucy.connectorapi.examples.simple.InMemoryDataGroupConnector`. Here, the data is determined based on the transferred request parameters and converted into the Connector API data structures or for inserts/updates, the values from the Intrexx objects are saved in the table.
 
-## Fortgeschrittene Connector Beispiele
+## Advanced connector examples
 
-In den Java Packages `de.uplanet.lucy.connectorapi.examples` befinden sich weitere Beispiel Implementierungen, die den Zugriff auf REST Webservices via HTTP und OData aufzeigen. Dabei werden auch Intrexx Filter-, Sortierung- und Pagination-Funktionen verwendet. Weiterführende Dokumentationen dazu befinden sich im Unterverzeichnis `docs`.
+Additional examples, which demonstrate access to REST web services via HTTP and OData, are available in the Java packages `de.uplanet.lucy.connectorapi.examples`. Intrexx filter, sorting and pagination functions are also used here. More detailed documentation for this can be found in the subdirectory `docs`.
 
-## Java API Dokumentation
+## Java API documentation
 
-Im `docs/api` Verzeichnis des Projekts befinden sich die Java API Dokumentation der Intrexx Connector API. Darin werden alle wesentlichen Klassen und Interfaces beschrieben. Des Weiteren stehen zur Laufzeit alle Kontextobjekte (Session, Request, etc.) wie in Intrexx Groovy Skripten zur Verfügung.
+The Java API documentation of the Intrexx Connector API can be found in the `docs/api` directory of the project. All of the most important classes and interfaces are described there. Furthermore, all context objects (session, request etc.) are available at runtime just like in Intrexx Groovy scripts.
 
-### Java Interfaces und Klassen der Connector API
+### Java interfaces and classes of the Connector API
 
-Die öffentlichen Schnittstellen und Klassen der Connector API befinden sich im Paket `de.uplanet.lucy.server.odata.connector.api.v1`. Im Folgenden werden die für eigene Connectoren zu implementierenden Methoden und bereitgestellte Hilfsklassen anhand des InMemory Beispiels beschrieben.
+The public interfaces and classes of the Connector API can be found in the package `de.uplanet.lucy.server.odata.connector.api.v1`. The following describes the methods to be implemented for custom connectors and the utility classes provided based on the InMemory example.
 
 #### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorDataGroupAdapter`
 
-Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Fremddatengruppen.
+This interface defines the methods required for create/read/update/delete actions in Intrexx external data groups.
 
 - `IConnectorQueryResult queryDataRange(IConnectorQueryCriteria p_criteria)`
-    Diese Methode wird von Intrexx aufgerufen, wenn Datensätze für eine Fremddatengruppe geladen werden sollen. Über das `IConnectorQueryCriteria p_criteria` Argument werden zur Auswahl der Datensätze benötigte Informationen wie Filter, Sortierung, Pagination übergeben.
+    This method is called by Intrexx when data records should be loaded for an external data group. Information required for selecting the data records such as filter, sorting, pagination are transferred via the `IConnectorQueryCriteria p_criteria` argument.
 - `IConnectorRecord queryDataRecord(String p_strRecordId, List<IConnectorField> p_fields)`
-    Diese Methode wird von Intrexx aufgerufen, wenn ein einzelne Datensatz für eine Fremddatengruppe geladen werden sollen. Über das `String p_strRecId` Argument wird die ID des zu ladenden Datensatzes übergeben, während `List<IConnectorField> p_fields` die zu selektierenden Datensatzfelder beinhaltet.
+    This method is called by Intrexx when a single data record should be loaded for an external data group. The ID of the data record to be loaded is transferred via the `String p_strRecId` argument, while `List<IConnectorField> p_fields` contains the data record fields to be selected.
 - `String insert(IConnectorRecord p_record)`
-    Diese Methode dient zum Anlegen eines neuen Datensatzes. Das `IConnectorRecord p_record` Argument enthält dabei die Datensatz-ID als auch die Feldwerte.
+    This method serves to create a new data record. The `IConnectorRecord p_record` argument contains the data record ID as well as the field values.
 - `boolean update(IConnectorRecord p_record)`
-    Diese Methode dient zum Ändern eines bestehenden Datensatzes. Das `IConnectorRecord p_record` Argument enthält dabei die Datensatz-ID sowie die Feldwerte.
+    This method serves to edit an existing data record. `IConnectorRecord p_record` argument contains the data record ID as well as the field values.
 - `void delete(IConnectorRecord p_record)`
-    Diese Methode dient zum Löschen eines bestehenden Datensatzes. Das `IConnectorRecord p_record` Argument enthält dabei die Datensatz-ID.
+    This method serves to delete an existing data record. `IConnectorRecord p_record` argument contains the data record ID as well as the field values.
 
-#### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorDataGroupAdapter`
+#### Base class `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorDataGroupAdapter`
 
-Von dieser abstrakten Klasse sollten alle konkreten IConnectorDataGroupAdapter-Implementierungen erben. Die Klasse stellt eine Reihe von Hilfsmethoden und Kontextobjekte zur Verfügung.
+All specific IConnectorDataGroupAdapter implementations should inherit from this abstract class. The class provides a range of help methods and context objects.
 
 #### Interface `de.uplanet.lucy.server.odata.connector.api.v1.IConnectorFileAdapter`
 
-Dieses Interface definiert die benötigten Methoden für Create/Read/Update/Delete-Aktionen von Intrexx Dateifeldern. Diese können zu einer Intrexx Datengruppe oder einer Fremddatengruppe gehören.
+This interface defines the actions required for create/read/update/delete actions of Intrexx file fields. These can belong to an Intrexx data group or an external data group.
 
-#### Basisklasse `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorFileAdapter`
+#### Base class `de.uplanet.lucy.server.odata.connector.api.v1.AbstractConnectorFileAdapter`
 
-Von dieser abstrakten Klasse sollten alle konkreten IConnectorFileAdapter-Implementierungen erben. Die Klasse stellt eine Reihe von Hilfsmethoden und Kontextobjekte zur Verfügung.
+All specific IConnectorFileAdapter implementations should inherit from this abstract class. The class provides a range of help methods and context objects.
