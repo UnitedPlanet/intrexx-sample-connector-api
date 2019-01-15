@@ -26,13 +26,7 @@ The connector-api-examples.zip file can be unzipped into any folder (outside of 
 To be able to compile the source code, some Intrexx and external libraries are required. These are listed in the Gradle project file `build.gradle` and are normally downloaded automatically. If it is not possible to connect to the United Planet Maven Repository, the required JAR files can be copied from the `lib` of the Intrexx installation to the `lib` folder of the project.
 
 *Please note*:
-Compiling the Java source code files requires at least Intrexx 18.03 OU 05 or 18.09, which was released in October 2018. The branch `v18.09` can be used for Intrexx 18.09. However, it is also possible to compile and use the classes with Intrexx 8.1.3. In this case, the `import...` commands in all Java files needs to be changed for the following packages:
-
-```java
- de.uplanet.lucy.server.odata.connector.api.v1 -> de.uplanet.lucy.server.odata.connector.api
-```
-
-Furthermore, all version specifications need to be changed from `8.1.5` to `8.1.3` in the `build.gradle` project file. Once the server has been updated to OU05 / 18.09, respectively, these changes need to be reverted.
+Compiling the Java source code files requires at least Intrexx 18.03 OU 05 or 18.09, which was released in October 2018. The branch `v18.09` should be used for Intrexx 18.09. 
 
 ### Compile project
 
@@ -60,7 +54,7 @@ Start Eclipse and check that the Gradle plugin is installed. Afterwards, import 
 
 #### IntelliJ
 
-IntelliJ inherently provides support for Gradle projects. The project can easily be imported via the Open dialog by selecting the project directory. 
+IntelliJ inherently provides support for Gradle projects. The project can easily be imported via the Open dialog by selecting the project directory.
 
 ### Start the portal server in debug mode
 

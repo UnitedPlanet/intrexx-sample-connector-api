@@ -25,13 +25,7 @@ Die connector-api-examples.zip Datei kann in einen beliebigen Ordner (außerhalb
 Um den Quellcode kompilieren zu können, werden einige Intrexx sowie externe Bibliotheken benötigt. Diese sind in der Gradle Projektdatei `build.gradle` aufgeführt und werden normalerweise automatisch heruntergeladen. Sollte der Zugriff auf das United Planet Maven Repository nicht möglich sein, können die benötigten JAR-Dateien aus dem  `lib` Ordner der Intrexx Installation in den `lib` Ordner des Projekts kopiert werden.
 
 *Hinweis*
-Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05 oder 18.09, das ab Oktober 2018 verfügbar sein wird. Für Intrexx 18.09 kann der Branch v18.09 verwendet werden. Es ist aber auch möglich, die Klassen bis dahin mit Intrexx 8.1.3 zu kompilieren und zu verwenden. In dem Fall muss in allen Java Dateien die `import ...` Anweisungen für folgende Packages geändert werden:
-
-```java
- de.uplanet.lucy.server.odata.connector.api.v1 -> de.uplanet.lucy.server.odata.connector.api
-```
-
-Des Weiteren müssen in der `build.gradle` Projektdatei alle Versionsangaben `8.1.5` zu `8.1.3` geändert werden. Nach Release des OU05 bzw. 18.09 müssen diese Änderungen dann wieder rückgängig gemacht werden.
+Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05 oder 18.09, das ab Oktober 2018 verfügbar sein wird. Für Intrexx 18.09 sollte der Branch v18.09 verwendet werden.
 
 ### Projekt kompilieren
 
