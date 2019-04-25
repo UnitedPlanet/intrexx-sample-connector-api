@@ -15,6 +15,8 @@ import org.apache.http.client.methods.RequestBuilder
 import org.apache.http.client.utils.HttpClientUtils
 import org.apache.http.entity.StringEntity
 import org.apache.http.util.EntityUtils
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 /**
@@ -48,9 +50,16 @@ class Office365EventsDataGroupAdapter(p_ctx:               IProcessingContext,
     override fun queryDataRange(p_queryCriteria: IConnectorQueryCriteria): IConnectorQueryResult {
         val httpClient = createHttpClient(connectorGuid, null)
 
+        // prepare date period filter
+        val now = LocalDateTime.now()
+        val periodStart = ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.minusDays(1).toInstant(ZoneOffset.UTC)))
+        val periodEnd = ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.plusDays(30).toInstant(ZoneOffset.UTC)))
+        val filter = "start/dateTime lt '$periodEnd' and end/dateTime gt '$periodStart'"
+
         val request = RequestBuilder.get("https://graph.microsoft.com/v1.0/me/events?" +
                 "\$select=id,subject,body,bodyPreview,organizer,attendees,start,end,location,webLink&\$top=20&" +
-                "\$orderby=${URIEncoder.encodeURIComponent("start/dateTime DESC")}")
+                "\$filter=" + URIEncoder.encodeURIComponent(filter) + "&" +
+                "\$orderby=${URIEncoder.encodeURIComponent("start/dateTime ASC")}")
                 .addHeader("accept", "application/json").build()
 
         try {
