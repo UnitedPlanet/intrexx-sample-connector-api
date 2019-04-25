@@ -13,8 +13,8 @@ The API is currently still in the preview stage. Please be aware that this has n
 
 ### Requirements
 
-- Intrexx 18.09
-- Java JDK 1.8
+- Intrexx 18.03 OU05, 18.09, 19.03
+- Java JDK 1.8/11
 - Optionally, an IDE such as Eclipse Java IDE or IntelliJ IDEA is recommended for developing custom connectors
 
 ### Create project folder
@@ -57,30 +57,25 @@ IntelliJ inherently provides support for Gradle projects. The project can easily
 
 To be able to test and debug custom Java code in an Intrexx portal at runtime, the portal server can be executed in the debug mode in Eclipse/IntelliJ. To do this, Intrexx and the Intrexx portal need to be installed on the same local PC as the development environment, and the portal server service needs to have been stopped. How the run configuration for the portal server can be set up in Eclipse is described below - the same specifications can be made in IntelliJ:
 
-- Create a new Java application called 'Portalserver' via `Run -> Run Configurations`.
-- Enter the class `de.uplanet.lucy.server.portalserver.PortalService` as the 'Main Class'.
-- Add the following parameter in the field 'VM Arguments' under 'Arguments' (adjust java.library.path accordingly for Linux):
-
-```bash
--ea
--Dfile.encoding=UTF-8
--Djava.library.path=../../bin/windows/amd64
--Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg
--Xms256m
--Xmx512m
--Dde.uplanet.jdbc.trace=false
--Dde.uplanet.lucy.server.odata.consumer.ssl.allowSelfSignedCerts=true
--Dlog4j.configuration=file:internal/cfg/log4j2.xml
-```
-
-- Specify the path to the portal directory, e.g. `C:\intrexx\org\portal`, under 'Working directory'.
-- Add the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
-- Add all JAR files from the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
-- Create a new environment variable called `INTREXX_HOME` under `Environment -> New` and enter the Intrexx installation folder as the value.
-- Save the configuration.
-- Copy the file `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j2.xml` to `log4j2-console.xml` and adjust it to receive log outputs in the console in Eclipse.
+- Create a new Gradle run configurationd 'Portalserver' via `Run -> Run Configurations`.
+- Choose the Gradle task `startPortal`.
+- Edit the variables for the portal server paths in `settings.gradle` to match your local installation.
 
 The portal server can now be started via Run/Debug in Eclipse/IntelliJ and breakpoints can be set in custom code. If a breakpoint is reached at runtime, the debugger is activated as of this point.
+
+To start the portal server from the command line:
+
+Windows:
+
+```bash
+gradlew.bat startPortal
+```
+
+Linux/MacOS
+
+```bash
+./gradlew startPortal
+```
 
 ## Example connector implementations
 
