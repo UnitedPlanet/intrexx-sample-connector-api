@@ -9,3 +9,9 @@
  */
 
 rootProject.name = 'connector-examples'
+
+// set paths to your local Intrexx installation for starting server and manger via Gradle
+gradle.ext.INTREXX_HOME = 'D:/UP/intrexxTrunk'
+gradle.ext.INTREXX_PORTAL_DIR = 'D:/UP/intrexxTrunk/org/trunk'
+gradle.ext.INTREXX_LOG4J_CFG = 'D:/Dev/up_source/log4j/log4j2.xml'
+gradle.ext.INTREXX_JRE_LIB_PATH = 'D:/UP/intrexxTrunk/bin/windows/amd64'

@@ -9,3 +9,4 @@
 /lib/ix-*.jar
 *.pdf
 *.iml
+out/
