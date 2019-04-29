@@ -22,7 +22,7 @@ repositories
 
 	flatDir
 	{
-		dirs 'D:/UP/intrexxTrunk/lib'
+		dirs 'lib'
 	}
 }
 
@@ -72,8 +72,7 @@ task startPortal (type: JavaExec) {
 	standardOutput = System.out
     errorOutput = System.err
 
-	classpath = (sourceSets.main.runtimeClasspath +
-			   fileTree('D:/UP/intrexxTrunk/lib'))
+	classpath = (sourceSets.main.runtimeClasspath + fileTree("${gradle.INTREXX_HOME}/lib"))
 
 	//doFirst {println classpath.join(',');println gradle.INTREXX_LOG4J_CFG}
 
