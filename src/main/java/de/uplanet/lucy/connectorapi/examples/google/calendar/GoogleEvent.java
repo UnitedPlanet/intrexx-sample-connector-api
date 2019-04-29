@@ -1,75 +1,37 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
-
 
 package de.uplanet.lucy.connectorapi.examples.google.calendar;
 
 import java.util.Date;
 
 
-public class GoogleEvent
+public final class GoogleEvent
 {
-	final private String m_id;
-	final private String m_created;
-	final private String m_updated;
-	final private String m_summary;
-	final private Date m_start;
-	final private Date m_end;
-	final private String m_htmlLink;
-	final private String m_location;
-	final private String m_description;
+	private final String m_id;
+	private final String m_created;
+	private final String m_updated;
+	private final String m_summary;
+	private final Date m_start;
+	private final Date m_end;
+	private final String m_htmlLink;
+	private final String m_location;
+	private final String m_description;
 
 
-	/**
-	 * @param p_summary
-	 * @param p_start
-	 * @param p_end
-	 * @param p_location
-	 * @param p_description
-	 */
 	public GoogleEvent(String p_summary, Date p_start, Date p_end, String p_description)
 	{
 		this(null, p_summary, p_start, p_end, p_description);
 	}
 
-	/**
-	 * @param p_summary
-	 * @param p_start
-	 * @param p_end
-	 * @param p_location
-	 * @param p_description
-	 */
 	public GoogleEvent(String p_id, String p_summary, Date p_start, Date p_end, String p_description)
 	{
 		this(p_id, p_summary, p_start, p_end, null, p_description);
 	}
 
-	/**
-	 * @param p_summary
-	 * @param p_start
-	 * @param p_end
-	 * @param p_location
-	 * @param p_description
-	 */
 	public GoogleEvent(String p_id, String p_summary, Date p_start, Date p_end, String p_location, String p_description)
 	{
 		this(p_id, null, null, p_summary, p_start, p_end, null, p_location, p_description);
 	}
 
-	/**
-	 * @param p_id
-	 * @param p_created
-	 * @param p_updated
-	 * @param p_summary
-	 * @param p_start
-	 * @param p_end
-	 * @param p_htmlLink
-	 * @param p_place
-	 */
 	public GoogleEvent(String p_id,
 	                   String p_created,
 	                   String p_updated,

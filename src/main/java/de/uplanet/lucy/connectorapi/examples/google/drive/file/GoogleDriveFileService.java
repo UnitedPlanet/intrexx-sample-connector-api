@@ -1,10 +1,3 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
-
 
 package de.uplanet.lucy.connectorapi.examples.google.drive.file;
 
@@ -48,6 +41,7 @@ import de.uplanet.lucy.server.ContextSession;
 import de.uplanet.lucy.server.file.action.IOperationFile;
 import de.uplanet.lucy.server.session.ISession;
 import de.uplanet.util.Preconditions;
+import de.uplanet.util.URIEncoder;
 
 
 public class GoogleDriveFileService
@@ -163,7 +157,7 @@ public class GoogleDriveFileService
 			final String l_parameters = String.format("?q='%s' in parents&fields=files(%s)", p_parentId,
 				GoogleDriveItem.FIELDS);
 
-			final URI l_uri = URI.create(l_rootUri + "files" + l_parameters.replaceAll(" ", "%20"));
+			final URI l_uri = URI.create(l_rootUri + "files" + URIEncoder.encodeURIComponent(l_parameters));
 			final HttpUriRequest l_request = RequestBuilder.get(l_uri).build();
 
 			l_jsonResponse = _getStringFromResponse(p_httpClient.execute(l_request));
@@ -174,10 +168,7 @@ public class GoogleDriveFileService
 
 			l_driveItem = l_items.stream().filter(p_item -> p_item.getName().equalsIgnoreCase(p_fileName)).findFirst();
 
-			if (l_driveItem.isPresent())
-				return true;
-			else
-				return false;
+			return l_driveItem.isPresent();
 		}
 		catch (Exception l_e)
 		{
@@ -210,10 +201,7 @@ public class GoogleDriveFileService
 			l_driveItem = l_items.stream().filter(p_item -> p_item.getName().equalsIgnoreCase(p_folderName))
 				.findFirst();
 
-			if (l_driveItem.isPresent())
-				return Optional.of(l_driveItem.get().getId());
-			else
-				return Optional.empty();
+			return l_driveItem.map(GoogleDriveItem::getId);
 		}
 		catch (Exception l_e)
 		{
@@ -223,11 +211,11 @@ public class GoogleDriveFileService
 
 	/**
 	 * Check authentication status of current user.
-	 * @param p_connectorCfgId
-	 * @param p_usrGuid
+	 * @param p_connectorCfgId The connector cfg ID.
+	 * @param p_userGuid The user GUID.
 	 * @return True, if user is already authenticated.
 	 */
-	public boolean isAuthenticated(String p_connectorCfgId, String p_usrGuid)
+	public boolean isAuthenticated(String p_connectorCfgId, String p_userGuid)
 	{
 		final ISession l_session = ContextSession.get();
 
@@ -240,8 +228,8 @@ public class GoogleDriveFileService
 		if (l_authHolder == null)
 			return false;
 
-		if (l_authHolder.contains(p_usrGuid, p_connectorCfgId))
-			l_auth = l_authHolder.get(p_usrGuid, p_connectorCfgId);
+		if (l_authHolder.contains(p_userGuid, p_connectorCfgId))
+			l_auth = l_authHolder.get(p_userGuid, p_connectorCfgId);
 		else
 			return false;
 

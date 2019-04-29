@@ -1,9 +1,3 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
 
 package de.uplanet.lucy.connectorapi.examples.sonarqube;
 

@@ -70,7 +70,7 @@ jar {
 
 task startPortal (type: JavaExec) {
 	standardOutput = System.out
-    errorOutput = System.err
+	errorOutput = System.err
 
 	classpath = (sourceSets.main.runtimeClasspath + fileTree("${gradle.INTREXX_HOME}/lib"))
 
