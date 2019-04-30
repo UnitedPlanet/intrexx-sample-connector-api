@@ -1,9 +1,3 @@
-/*
- * $Id: Office365OneDriveFileAdapter.java 180718 2018-03-29 14:33:47Z ManuelR $
- *
- * Copyright 2000-2017 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
 
 package de.uplanet.lucy.connectorapi.examples.google.drive.file;
 
@@ -33,7 +27,7 @@ import de.uplanet.lucy.server.odata.connector.api.v1.Field;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorField;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorRecord;
 import de.uplanet.lucy.server.odata.consumer.office365.Office365ConnectorException;
-import de.uplanet.lucy.server.portalserver.PortalServerPath;
+import de.uplanet.lucy.server.portalserver.PortalPath;
 import de.uplanet.lucy.server.property.IPropertyCollection;
 import de.uplanet.lucy.server.rtcache.FieldInfo;
 import de.uplanet.lucy.server.util.ContentTypeUtil;
@@ -70,7 +64,7 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		}
 		else
 		{
-			return _getRecordFiles(p_record, p_tz);
+			return _getRecordFiles(p_record);
 		}
 	}
 
@@ -97,7 +91,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 	@Override
 	public IVHFileAdapterDescriptor getFileByName(IConnectorRecord p_record,
 	                                              String p_strFileName)
-		throws Exception
 	{
 		Preconditions.requireNonNull(p_record.getId(), "RecordId is required!");
 		final GoogleDriveItem l_driveItem;
@@ -197,7 +190,7 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		Preconditions.requireNonNullNonEmpty(l_strUrl, "Cannot get file URL.");
 
 		final File l_fileTmpDir;
-		l_fileTmpDir = IOHelper.createTempDirectory(PortalServerPath.get(PortalServerPath.TMP_DIR),
+		l_fileTmpDir = IOHelper.createTempDirectory(PortalPath.get(PortalPath.TMP_DIR).toFile(),
 													ContextSession.get().getId(), "_connector");
 
 		final Path l_p = l_fileTmpDir.toPath().resolve(l_vhf.getFileName());
@@ -228,7 +221,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 	@Override
 	public IConnectorRecord createFiles(IConnectorRecord p_record,
                                         List<IOperationFile> p_operationFiles)
-		throws Exception
 	{
 		if (p_operationFiles.size() != 1 && isSingleFileField(m_properties))
 		{
@@ -252,12 +244,12 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 			}
 
 			final String l_parentId = m_properties.getString(GOOGLE_DRIVE_CONSTANT.FOLDER_ID);
-			final String l_filename = ValueHolderHelper.getStringFromVH(
-					p_record.getFieldByGuid(m_properties.getString(GOOGLE_DRIVE_CONSTANT.NAME_GUID)).getValue());
+			final String l_filename = ValueHolderHelper.getStringFromVH(p_record.getFieldByName("name").getValue());
 
 			final GoogleDriveItem l_item = m_service.uploadFile(createHttpClient(), l_file, l_filename, l_parentId);
 
-			l_return.add(new Field(m_properties.getGuid(GOOGLE_DRIVE_CONSTANT.ITEM_ID), ValueHolderFactory.getValueHolder(l_item.getId())));
+			l_return.add(new Field(p_record.getFieldByName("id").getGuid(),
+			                       ValueHolderFactory.getValueHolder(l_item.getId())));
 		}
 		else
 		{
@@ -273,7 +265,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
                                         List<IOperationFile>         p_newFiles,
                                         List<IOperationFile>         p_replacedFiles,
                                         List<IOperationFile>         p_deletedFiles)
-		throws Exception
 	{
 		if (itemExists(p_record))
 		{
@@ -297,7 +288,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 	@Override
 	public IConnectorRecord replaceFiles(IConnectorRecord p_record,
 	                                     List<IOperationFile> p_replacedFiles)
-			throws Exception
 	{
 		if (p_replacedFiles.size() > 1 && isSingleFileField(m_properties))
 			throw new IllegalArgumentException("Invalid number of file operations for single file field.");
@@ -330,7 +320,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 
 	@Override
 	public IConnectorRecord deleteFiles(IConnectorRecord p_record)
-		throws Exception
 	{
 		//IMPLEMENTED BY GoogleDriveDataGroupAdapter
 		return p_record;
@@ -340,7 +329,6 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 	@Override
 	public IConnectorRecord deleteFiles(IConnectorRecord p_record,
 	                                                List<IOperationFile> p_operationFiles)
-		throws Exception
 	{
 		//IMPLEMENTED BY GoogleDriveDataGroupAdapter
 		return p_record;
@@ -411,7 +399,7 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		return l_desc;
 	}
 
-	private List<IVHFileAdapterDescriptor> _getRecordFiles(IConnectorRecord p_record, TimeZone p_tz)
+	private List<IVHFileAdapterDescriptor> _getRecordFiles(IConnectorRecord p_record)
 	{
 		final List<IVHFileAdapterDescriptor> l_descriptors;
 

@@ -8,3 +8,5 @@
 /build/
 /lib/ix-*.jar
 *.pdf
+*.iml
+out/

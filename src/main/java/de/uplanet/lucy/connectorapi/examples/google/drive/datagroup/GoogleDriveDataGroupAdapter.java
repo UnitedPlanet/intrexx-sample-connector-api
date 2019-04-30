@@ -1,9 +1,3 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
 
 package de.uplanet.lucy.connectorapi.examples.google.drive.datagroup;
 
@@ -73,7 +67,7 @@ public final class GoogleDriveDataGroupAdapter extends AbstractConnectorDataGrou
 
 	/**
 	 * Adds the metadata of a file to Google drive.
-
+	 * 
 	 * @return item id
 	 */
 	@Override

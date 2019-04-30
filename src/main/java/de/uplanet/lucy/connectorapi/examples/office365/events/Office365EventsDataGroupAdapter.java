@@ -6,9 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.olingo.client.api.ODataClient;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityCreateRequest;
@@ -56,7 +54,7 @@ import de.uplanet.lucy.server.rtcache.RtCache;
 
 
 /**
- * This class provides access to Google calendar events to an Intrexx datagroup.
+ * This class provides access to Office365 calendar events to an Intrexx data group.
  */
 public final class Office365EventsDataGroupAdapter extends AbstractConnectorDataGroupAdapter
 {
@@ -159,7 +157,7 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 
 		try
 		{
-			return _executeInsertUpdateRequest(Optional.empty(), l_subject, l_end, l_start, l_body);
+			return _executeInsertUpdateRequest(null, l_subject, l_end, l_start, l_body);
 		}
 		catch (EdmPrimitiveTypeException l_e)
 		{
@@ -197,7 +195,7 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 
 		try
 		{
-			String l_id = _executeInsertUpdateRequest(Optional.of(p_record.getId()),
+			String l_id = _executeInsertUpdateRequest(p_record.getId(),
 			                                          l_subject,
 			                                          l_end,
 			                                          l_start,
@@ -234,7 +232,7 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 
 	private List<IConnectorRecord> _getDataRange(List<IConnectorField> p_fields, ClientEntitySet l_entitySet)
 	{
-		List<IConnectorRecord> l_result = new LinkedList<IConnectorRecord>();
+		List<IConnectorRecord> l_result = new ArrayList<>();
 
 		l_entitySet.getEntities().forEach(p_entity -> l_result.add(_getValueMapForEntity(p_fields, p_entity)));
 
@@ -243,7 +241,7 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 
 	private IConnectorRecord _getValueMapForEntity(List<IConnectorField> p_fields, ClientEntity p_entity)
 	{
-		List<IConnectorField> l_result = new ArrayList<IConnectorField>();
+		List<IConnectorField> l_result = new ArrayList<>();
 		String l_id;
 		try
 		{
@@ -257,32 +255,37 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 						.getPrimitiveValue().toCastValue(String.class));
 					l_result.add(new Field(l_field.getGuid(), l_vh));
 				}
-				else if ("startDateTime".equalsIgnoreCase(l_field.getName()))
+				else
 				{
-					IValueHolder<Date> l_vh = ValueHolderFactory.getValueHolder(new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.ssssss").parse(p_entity.getProperty("start").getComplexValue().get(
-							"dateTime").getPrimitiveValue().toCastValue(String.class)));
-					l_result.add(new Field(l_field.getGuid(), l_vh));
-				}
-				else if ("endDateTime".equalsIgnoreCase(l_field.getName()))
-				{
-					IValueHolder<Date> l_vh = ValueHolderFactory.getValueHolder(new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.ssssss").parse(p_entity.getProperty("end").getComplexValue().get(
-							"dateTime").getPrimitiveValue().toCastValue(String.class)));
+					final SimpleDateFormat l_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ssssss");
 
-					l_result.add(new Field(l_field.getGuid(), l_vh));
-				}
-				else if ("body".equalsIgnoreCase(l_field.getName()))
-				{
-					IValueHolder<String> l_vh = ValueHolderFactory.getValueHolder(p_entity.getProperty("body")
-						.getComplexValue().get("content").getPrimitiveValue().toCastValue(String.class));
-					l_result.add(new Field(l_field.getGuid(), l_vh));
-				}
-				else if ("subject".equalsIgnoreCase(l_field.getName()))
-				{
-					IValueHolder<String> l_vh = ValueHolderFactory.getValueHolder(p_entity.getProperty("subject")
-						.getPrimitiveValue().toCastValue(String.class));
-					l_result.add(new Field(l_field.getGuid(), l_vh));
+					if ("startDateTime".equalsIgnoreCase(l_field.getName()))
+					{
+						IValueHolder<Date> l_vh = ValueHolderFactory.getValueHolder(l_format.parse(
+								p_entity.getProperty("start").getComplexValue().get(
+								"dateTime").getPrimitiveValue().toCastValue(String.class)));
+						l_result.add(new Field(l_field.getGuid(), l_vh));
+					}
+					else if ("endDateTime".equalsIgnoreCase(l_field.getName()))
+					{
+						IValueHolder<Date> l_vh = ValueHolderFactory.getValueHolder(l_format.parse(
+								p_entity.getProperty("end").getComplexValue().get(
+								"dateTime").getPrimitiveValue().toCastValue(String.class)));
+
+						l_result.add(new Field(l_field.getGuid(), l_vh));
+					}
+					else if ("body".equalsIgnoreCase(l_field.getName()))
+					{
+						IValueHolder<String> l_vh = ValueHolderFactory.getValueHolder(p_entity.getProperty("body")
+							.getComplexValue().get("content").getPrimitiveValue().toCastValue(String.class));
+						l_result.add(new Field(l_field.getGuid(), l_vh));
+					}
+					else if ("subject".equalsIgnoreCase(l_field.getName()))
+					{
+						IValueHolder<String> l_vh = ValueHolderFactory.getValueHolder(p_entity.getProperty("subject")
+							.getPrimitiveValue().toCastValue(String.class));
+						l_result.add(new Field(l_field.getGuid(), l_vh));
+					}
 				}
 			}
 		}
@@ -295,11 +298,12 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 		return new Record(l_id, l_result);
 	}
 
-	private String _executeInsertUpdateRequest(Optional<String> p_id, String p_subject, Date p_end, Date p_start,
+	private String _executeInsertUpdateRequest(String p_id, String p_subject, Date p_end, Date p_start,
 		String p_body) throws EdmPrimitiveTypeException
 	{
 		final SimpleDateFormat l_sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		final String l_result;
+
 		IOffice365OneDriveService l_service = Office365OneDriveService.newInstance();
 
 		ODataClient l_client = l_service.createODataClient(_getConnectorGuid(), null);
@@ -350,9 +354,9 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 			l_entity.getProperties().add(l_factory.newComplexProperty("body", l_bodyCV));
 		}
 
-		if (p_id.isPresent() && !p_id.get().isEmpty())
+		if (p_id != null && !p_id.isEmpty())
 		{
-			URI l_uri = URI.create(ms_rootUri + "me/events/" + p_id.get());
+			URI l_uri = URI.create(ms_rootUri + "me/events/" + p_id);
 
 			ODataEntityUpdateRequest<ClientEntity> l_req;
 			l_req = l_client.getCUDRequestFactory().getEntityUpdateRequest(l_uri, UpdateType.PATCH, l_entity);

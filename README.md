@@ -13,8 +13,8 @@ The API is currently still in the preview stage. Please be aware that this has n
 
 ### Requirements
 
-- Intrexx 18.03 with Online Update 05, or Intrexx 18.09
-- Java JDK 1.8
+- Intrexx 18.03 OU05, 18.09, 19.03
+- Java JDK 1.8/11
 - Optionally, an IDE such as Eclipse Java IDE or IntelliJ IDEA is recommended for developing custom connectors
 
 ### Create project folder
@@ -24,9 +24,6 @@ The connector-api-examples.zip file can be unzipped into any folder (outside of 
 ### Project dependencies
 
 To be able to compile the source code, some Intrexx and external libraries are required. These are listed in the Gradle project file `build.gradle` and are normally downloaded automatically. If it is not possible to connect to the United Planet Maven Repository, the required JAR files can be copied from the `lib` of the Intrexx installation to the `lib` folder of the project.
-
-*Please note*:
-Compiling the Java source code files requires at least Intrexx 18.03 OU 05 or 18.09, which was released in October 2018. The branch `v18.09` in this repository should be used for Intrexx 18.09.
 
 ### Compile project
 
@@ -60,39 +57,25 @@ IntelliJ inherently provides support for Gradle projects. The project can easily
 
 To be able to test and debug custom Java code in an Intrexx portal at runtime, the portal server can be executed in the debug mode in Eclipse/IntelliJ. To do this, Intrexx and the Intrexx portal need to be installed on the same local PC as the development environment, and the portal server service needs to have been stopped. How the run configuration for the portal server can be set up in Eclipse is described below - the same specifications can be made in IntelliJ:
 
-- Create a new Java application called 'Portalserver' via `Run -> Run Configurations`.
-- Enter the class `de.uplanet.lucy.server.portalserver.PortalService` as the 'Main Class'.
-- Add the following parameter in the field 'VM Arguments' under 'Arguments' (adjust java.library.path accordingly for Linux):
-
-```bash
--ea
--Dfile.encoding=UTF-8
--Djava.library.path=../../bin/windows/amd64
--Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg
--Xms256m
--Xmx512m
--Xbootclasspath/p:../../lib/xsltc-hndl-fix.jar
--Dde.uplanet.jdbc.trace=false
--Dde.uplanet.lucy.server.odata.consumer.ssl.allowSelfSignedCerts=true
--Dlog4j.configuration=file:internal/cfg/log4j-console.properties
-```
-
-- Specify the path to the portal directory, e.g. `C:\intrexx\org\portal`, under 'Working directory'.
-- Add the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
-- Add all JAR files from the folder `<INTREXX_HOME>\lib\update` under `Classpath -> User Entries -> Advanced -> Add external folder`.
-- Create a new environment variable called `INTREXX_HOME` under `Environment -> New` and enter the Intrexx installation folder as the value.
-- Save the configuration.
-- Copy the file `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j.properties` to `log4j-console.properties` and adjust the following lines there to receive log outputs in the console in Eclipse:
-
-```bash
-# Set root logger level
-log4j.rootLogger=WARN, File, Console
-
-# Set United Planet logging level
-log4j.logger.de.uplanet=INFO, File, SysFifo, Console
-```
+- Create a new Gradle run configurationd 'Portalserver' via `Run -> Run Configurations`.
+- Choose the Gradle task `startPortal`.
+- Edit the variables for the portal server paths in `settings.gradle` to match your local installation.
 
 The portal server can now be started via Run/Debug in Eclipse/IntelliJ and breakpoints can be set in custom code. If a breakpoint is reached at runtime, the debugger is activated as of this point.
+
+To start the portal server from the command line:
+
+Windows:
+
+```bash
+gradlew.bat startPortal
+```
+
+Linux/MacOS
+
+```bash
+./gradlew startPortal
+```
 
 ## Example connector implementations
 
@@ -198,7 +181,7 @@ connector.dataGroup.adapter.class =	de.uplanet.lucy.connectorapi.examples.simple
 
 #### Integrate the project in Intrexx
 
-So that custom connector classes are found in the portal server at runtime, the JAR file of the project needs to be included in the Intrexx classpath. The easiest way to achieve this is if the file `build\libs\connector-examples-8.1.3.jar` is copied to `<INTREXX_HOME>\lib` directly after the call of `gradlew.bat jar`. The portal server needs to be restarted afterwards. After the restart, three data records should be listed in the table when you open the application in the browser. These can be modified or deleted, or new records can be created.
+So that custom connector classes are found in the portal server at runtime, the JAR file of the project needs to be included in the Intrexx classpath. The easiest way to achieve this is if the file `build\libs\connector-examples-9.1.5.jar` is copied to `<INTREXX_HOME>\lib` directly after the call of `gradlew.bat jar`. The portal server needs to be restarted afterwards. After the restart, three data records should be listed in the table when you open the application in the browser. These can be modified or deleted, or new records can be created.
 
 #### Implement connector classes
 

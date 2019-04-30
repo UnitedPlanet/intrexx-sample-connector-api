@@ -12,7 +12,7 @@ Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beis
 
 ### Vorbedingungen
 
-- Intrexx 18.03 Installation mit Online Update 05 oder Intrexx 18.09
+- Intrexx 18.09
 - Java JDK 1.8
 - Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
 
@@ -23,9 +23,6 @@ Die connector-api-examples.zip Datei kann in einen beliebigen Ordner (außerhalb
 ### Projektabhängigkeiten
 
 Um den Quellcode kompilieren zu können, werden einige Intrexx sowie externe Bibliotheken benötigt. Diese sind in der Gradle Projektdatei `build.gradle` aufgeführt und werden normalerweise automatisch heruntergeladen. Sollte der Zugriff auf das United Planet Maven Repository nicht möglich sein, können die benötigten JAR-Dateien aus dem  `lib` Ordner der Intrexx Installation in den `lib` Ordner des Projekts kopiert werden.
-
-*Hinweis*
-Die Java Quellcode Dateien benötigen zum Kompilieren mindestens Intrexx 8.1 OU 05 oder 18.09, das ab Oktober 2018 verfügbar sein wird. Für Intrexx 18.09 sollte der Branch `v18.09` in diesem Repository verwendet werden.
 
 ### Projekt kompilieren
 
@@ -70,26 +67,17 @@ Um eigenen Java-Code zur Laufzeit in einem Intrexx Portal testen und debuggen zu
 -Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg
 -Xms256m
 -Xmx512m
--Xbootclasspath/p:../../lib/xsltc-hndl-fix.jar
 -Dde.uplanet.jdbc.trace=false
 -Dde.uplanet.lucy.server.odata.consumer.ssl.allowSelfSignedCerts=true
--Dlog4j.configuration=file:internal/cfg/log4j-console.properties
+-Dlog4j.configuration=file:internal/cfg/log4j2.xml
 ```
 
-- Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal`
+- Unter 'Working directory' den Pfad zum Portalverzeichnis angeben, z.B. `C:\intrexx\org\portal` oder `C:\Program Data\intrexx\portal` unter Windows, unter Linux `/opt/intrexx/org/portal`.
 - Unter `Classpath -> User Entries -> Advanced -> Add external folder` den Ordner `<INTREXX_HOME>\lib\update` hinzufügen.
 - Unter `Classpath -> User Entries -> Add external jars` alle Jar-Dateien aus dem Ordner `<INTREXX_HOME>\lib` hinzufügen.
-- Unter `Environment -> New` eine neue Umgebungsvariable mit Namen `INTREXX_HOME` erstellen und als Value den Intrexx Installationsordner eintragen.
+- Unter `Environment -> New` eine neue Umgebungsvariable mit Namen `INTREXX_HOME` erstellen und als Value den Pfad zum Intrexx Installationsordner eintragen.
 - Konfiguration speichern.
-- Die Datei `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j.properties` zu `log4j-console.properties` kopieren und dort folgende Zeilen anpassen, um in Eclipse die Logausgaben in der Console zu erhalten:
-
-```bash
-# Set root logger level
-log4j.rootLogger=WARN, File, Console
-
-# Set United Planet logging level
-log4j.logger.de.uplanet=INFO, File, SysFifo, Console
-```
+- Optional: Die Datei `<INTREXX_HOME>\org\<portal>\internal\cfg\log4j2.xml` zu `log4j2-console.xml` kopieren und darin die Logausgaben auf die Console mit ausgeben.
 
 Nun kann der Portalserver via Run/Debug in Eclipse/IntelliJ gestartet werden und Breakpoints in eigenem Code gesetzt werden. Wird zur Laufzeit ein Breakpoint erreicht, wird ab dieser Stelle der Debugger aktiviert.
 
@@ -109,8 +97,8 @@ Eigene Connectoren können direkt innerhalb des Beispiel-Projekts entwickelt wer
 
 *Hinweis*: Sollte die Entwicklung auf Basis eines bereits bestehenden Portals erfolgen, so ist zu prüfen, ob diese beiden Dateien sich bereits im Portalverzeichnis befinden. Ansonsten müssen diese aus dem jeweiligen Ordner unter `<INTREXX_HOME>/orgtempl/...` in alle Portale kopiert werden.
 
-- `org\<portal>\internal\cfg\biaconfig\bia-connector.cfg`
-- `org\<portal>\internal\cfg\odata\connector\template\msoffice365.xml`
+- org\<portal>\internal\cfg\biaconfig\bia-connector.cfg
+- org\<portal>\internal\cfg\odata\connector\template\msoffice365.xml
 
 ### InMemory Connector Beispiel
 

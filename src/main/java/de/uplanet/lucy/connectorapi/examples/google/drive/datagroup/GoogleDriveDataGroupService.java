@@ -1,10 +1,3 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
-
 
 package de.uplanet.lucy.connectorapi.examples.google.drive.datagroup;
 
@@ -31,10 +24,12 @@ import org.slf4j.LoggerFactory;
 import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
 import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.server.dataobjects.impl.ValueHolderFactory;
+import de.uplanet.lucy.server.dataobjects.impl.ValueHolderHelper;
 import de.uplanet.lucy.server.odata.connector.api.v1.Field;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorField;
 import de.uplanet.lucy.server.odata.connector.api.v1.IConnectorRecord;
 import de.uplanet.lucy.server.odata.connector.api.v1.Record;
+import de.uplanet.util.Preconditions;
 
 
 public class GoogleDriveDataGroupService
@@ -235,25 +230,15 @@ public class GoogleDriveDataGroupService
 	@SuppressWarnings("unchecked")
 	public String updateMetaDataItem(HttpClient p_httpClient, IConnectorRecord p_record)
 	{
-		String l_id = null;
-		String l_name = null;
-		String l_description = null;
+		final String l_name = _extractStringFieldValue(p_record, "name");
+		final String l_description = _extractStringFieldValue(p_record, "description");
 
-		for (IConnectorField l_field : p_record.getFields())
-		{
-			if ("name".equalsIgnoreCase(l_field.getName()))
-			{
-				l_name = (String) l_field.getValue().getValue();
-			}
-			else if ("id".equalsIgnoreCase(l_field.getName()))
-			{
-				l_id = (String) l_field.getValue().getValue();
-			}
-			else if ("description".equalsIgnoreCase(l_field.getName()))
-			{
-				l_description = (String) l_field.getValue().getValue();
-			}
-		}
+		String l_id = _extractStringFieldValue(p_record, "id");
+
+		if (l_id == null || l_id.isEmpty() || l_id.equals("-1"))
+			l_id = p_record.getId();
+
+		Preconditions.requireNonNullNonEmpty(l_id, "Record id must be set and not empty");
 
 		try
 		{
@@ -418,5 +403,23 @@ public class GoogleDriveDataGroupService
 		IOUtils.copy(l_inputStream, writer, "UTF-8");
 		String l_string = writer.toString();
 		return l_string;
+	}
+
+	private String _extractStringFieldValue(IConnectorRecord p_record, String p_fieldName)
+	{
+		IConnectorField l_field;
+		try
+		{
+			l_field = p_record.getFieldByName(p_fieldName);
+		}
+		catch (Exception l_e)
+		{
+			return null;
+		}
+
+		if (l_field == null)
+			return null;
+
+		return ValueHolderHelper.getStringFromVH(l_field.getValue());
 	}
 }

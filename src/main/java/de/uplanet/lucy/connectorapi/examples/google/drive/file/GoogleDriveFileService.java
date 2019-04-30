@@ -1,10 +1,3 @@
-/*
- * $Id$
- *
- * Copyright 2000-2018 United Planet GmbH, Freiburg Germany
- * All Rights Reserved.
- */
-
 
 package de.uplanet.lucy.connectorapi.examples.google.drive.file;
 
@@ -39,22 +32,23 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 
+import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
+import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.odata.ODATA_CONSTANT;
 import de.uplanet.lucy.odata.ODataAuth;
 import de.uplanet.lucy.odata.ODataAuthHolder;
 import de.uplanet.lucy.server.ContextSession;
-import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveItem;
-import de.uplanet.lucy.connectorapi.examples.google.drive.GoogleDriveJSONParser;
 import de.uplanet.lucy.server.file.action.IOperationFile;
 import de.uplanet.lucy.server.session.ISession;
 import de.uplanet.util.Preconditions;
+import de.uplanet.util.URIEncoder;
 
 
 public class GoogleDriveFileService
 {
 	private static final String ms_rootUri = "https://www.googleapis.com/drive/v3/files/";
 
-	private static final String ms_folderMimeType = "application/vnd.google-apps.folder";
+	public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 	private static final int ONE_MB = 1024 * 1024;
 
 	private final GoogleDriveJSONParser m_googleDriveParser = new GoogleDriveJSONParser();
@@ -63,7 +57,10 @@ public class GoogleDriveFileService
 	 * Creates folders. For creating main folders use parentFolderId = 'root'
 	 * @return {@link GoogleDriveItem}
 	 */
-	public GoogleDriveItem createFolder(HttpClient p_httpClient, String p_parentId, String p_folderName)
+	public GoogleDriveItem createItem(HttpClient p_httpClient,
+	                                  String     p_parentId,
+	                                  String     p_folderName,
+	                                  String     p_mimeType)
 		throws RuntimeException
 	{
 		String l_parameter = "?fields=" + GoogleDriveItem.FIELDS;
@@ -71,7 +68,7 @@ public class GoogleDriveFileService
 
 		try
 		{
-			StringEntity entity = new StringEntity(_getDriveItemJSON(p_folderName, p_parentId, ms_folderMimeType));
+			StringEntity entity = new StringEntity(_getDriveItemJSON(p_folderName, p_parentId, p_mimeType));
 
 			HttpUriRequest l_request = RequestBuilder.post(l_deleteURI).setEntity(entity).build();
 			String l_jsonString = _getStringFromResponse(p_httpClient.execute(l_request));
@@ -160,7 +157,7 @@ public class GoogleDriveFileService
 			final String l_parameters = String.format("?q='%s' in parents&fields=files(%s)", p_parentId,
 				GoogleDriveItem.FIELDS);
 
-			final URI l_uri = URI.create(l_rootUri + "files" + l_parameters.replaceAll(" ", "%20"));
+			final URI l_uri = URI.create(l_rootUri + "files" + URIEncoder.encodeURIComponent(l_parameters));
 			final HttpUriRequest l_request = RequestBuilder.get(l_uri).build();
 
 			l_jsonResponse = _getStringFromResponse(p_httpClient.execute(l_request));
@@ -171,10 +168,7 @@ public class GoogleDriveFileService
 
 			l_driveItem = l_items.stream().filter(p_item -> p_item.getName().equalsIgnoreCase(p_fileName)).findFirst();
 
-			if (l_driveItem.isPresent())
-				return true;
-			else
-				return false;
+			return l_driveItem.isPresent();
 		}
 		catch (Exception l_e)
 		{
@@ -207,10 +201,7 @@ public class GoogleDriveFileService
 			l_driveItem = l_items.stream().filter(p_item -> p_item.getName().equalsIgnoreCase(p_folderName))
 				.findFirst();
 
-			if (l_driveItem.isPresent())
-				return Optional.of(l_driveItem.get().getId());
-			else
-				return Optional.empty();
+			return l_driveItem.map(GoogleDriveItem::getId);
 		}
 		catch (Exception l_e)
 		{
@@ -220,11 +211,11 @@ public class GoogleDriveFileService
 
 	/**
 	 * Check authentication status of current user.
-	 * @param p_connectorCfgId
-	 * @param p_usrGuid
+	 * @param p_connectorCfgId The connector cfg ID.
+	 * @param p_userGuid The user GUID.
 	 * @return True, if user is already authenticated.
 	 */
-	public boolean isAuthenticated(String p_connectorCfgId, String p_usrGuid)
+	public boolean isAuthenticated(String p_connectorCfgId, String p_userGuid)
 	{
 		final ISession l_session = ContextSession.get();
 
@@ -237,8 +228,8 @@ public class GoogleDriveFileService
 		if (l_authHolder == null)
 			return false;
 
-		if (l_authHolder.contains(p_usrGuid, p_connectorCfgId))
-			l_auth = l_authHolder.get(p_usrGuid, p_connectorCfgId);
+		if (l_authHolder.contains(p_userGuid, p_connectorCfgId))
+			l_auth = l_authHolder.get(p_userGuid, p_connectorCfgId);
 		else
 			return false;
 
@@ -473,7 +464,7 @@ public class GoogleDriveFileService
 	public int getFileCount(HttpClient p_httpClient, String p_parentId)
 	{
 		final String l_parameters = String.format("?q=mimeType != '%s' and '%s' in parents",
-		                                          ms_folderMimeType,
+		                                          FOLDER_MIME_TYPE,
 		                                          p_parentId);
 
 		final URI l_uri = URI.create(String.format("%sfiles%s&fields=files(%s)",
