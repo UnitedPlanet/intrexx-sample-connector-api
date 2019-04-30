@@ -14,12 +14,12 @@ The API is currently still in the preview stage. Please be aware that this has n
 ### Requirements
 
 - Intrexx 18.03 OU05, 18.09, 19.03
-- Java JDK 1.8/11
-- Optionally, an IDE such as Eclipse Java IDE or IntelliJ IDEA is recommended for developing custom connectors
+- Java JDK 1.8 for Intrexx 18.03/18.09 or OpenJDK 11 for Intrexx 19.03.
+- Optionally, a Java IDE such as IntelliJ IDEA or Eclipse is recommended for developing custom connectors.
 
 ### Create project folder
 
-The connector-api-examples.zip file can be unzipped into any folder (outside of Intrexx). In the following it is assumed that the project folder is called `connector-api-examples`.
+Either clone or download this repostiroy (outside of Intrexx). In the following it is assumed that the project folder is called `intrexx-sample-connector-api`.
 
 ### Project dependencies
 
