@@ -208,10 +208,13 @@ class Office365EventsDataGroupAdapter(p_ctx:               IProcessingContext,
     }
 
     private fun parseEvents(body: String, toFields: List<IConnectorField>): List<IConnectorRecord> {
+        //parse body
         val payload = Klaxon().parseJsonObject(body.reader())
+
+        // parse events
         val events = if (payload.containsKey("value")) {
             Klaxon().parseFromJsonArray<Event>(payload["value"] as JsonArray<*>)
-        } else {
+        } else { // parse single events
             val event = Klaxon().parseFromJsonObject<Event>(payload)
             if (event != null)
                 listOf(event)
