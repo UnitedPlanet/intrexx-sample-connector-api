@@ -50,30 +50,42 @@ class Office365EventsDataGroupAdapter(p_ctx:               IProcessingContext,
     override fun queryDataRange(p_queryCriteria: IConnectorQueryCriteria): IConnectorQueryResult {
         val httpClient = createHttpClient(connectorGuid, null)
 
-        // prepare date period filter
+        // prepare date range filter
         val now = LocalDateTime.now()
-        val periodStart = ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.minusDays(1).toInstant(ZoneOffset.UTC)))
-        val periodEnd = ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.plusDays(30).toInstant(ZoneOffset.UTC)))
+        val periodStart =
+                ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.minusDays(1)
+                .toInstant(ZoneOffset.UTC)))
+        val periodEnd =
+                ISODateTimeUtil.formatISODateTimeMillis(Date.from(now.plusDays(30)
+                .toInstant(ZoneOffset.UTC)))
         val filter = "start/dateTime lt '$periodEnd' and end/dateTime gt '$periodStart'"
 
+        // prepare request URI
         val request = RequestBuilder.get("https://graph.microsoft.com/v1.0/me/events?" +
-                "\$select=id,subject,body,bodyPreview,organizer,attendees,start,end,location,webLink&\$top=20&" +
+                "\$select=id,subject,body,bodyPreview,organizer,attendees,start,end," +
+                "location,webLink&" +
+                "\$top=20&" +
                 "\$filter=" + URIEncoder.encodeURIComponent(filter) + "&" +
                 "\$orderby=${URIEncoder.encodeURIComponent("start/dateTime ASC")}")
                 .addHeader("accept", "application/json").build()
 
         try {
+            // execute request
             val response = httpClient.execute(request)
+
+            // get response payload
             val body = EntityUtils.toString(response.entity)
 
-            if (response.statusLine.statusCode == 200) {
+            if (response.statusLine.statusCode == 200) { // OK?
+                // create event objects from response JSON
                 val result = parseEvents(body, p_queryCriteria.fields)
+                // create query result
                 return ConnectorQueryResult(result, result.size, 20)
-            } else {
+            } else { // NOT OK
                 throw RuntimeException("Request failed with status " + response.statusLine.toString())
             }
         } finally {
-            HttpClientUtils.closeQuietly(httpClient)
+            HttpClientUtils.closeQuietly(httpClient) //clean up resources
         }
     }
 
