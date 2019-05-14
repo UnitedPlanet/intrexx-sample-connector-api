@@ -68,6 +68,12 @@ jar {
 }
 
 
+task copyDependencies(type: Copy) {
+	from configurations.default
+	into 'build/dependencies'
+}
+
+
 task startPortal (type: JavaExec) {
 	standardOutput = System.out
 	errorOutput = System.err
