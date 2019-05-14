@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.uplanet.lucy.server.rtcache.FieldInfo;
 import org.apache.olingo.client.api.ODataClient;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityCreateRequest;
 import org.apache.olingo.client.api.communication.request.cud.ODataEntityUpdateRequest;
@@ -84,7 +85,7 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 	{
 		final PrintExpressionVisitor l_visit = new PrintExpressionVisitor();
 		l_visit.visitNode(p_criteria.getFilterExpression());
-		ms_log.error("Unexpected filter expression: " + l_visit.toString());
+		ms_log.info("Filter expression: " + l_visit.toString());
 
 		final CalendarFilterVisitor l_cvisit = new CalendarFilterVisitor();
 		l_cvisit.visitNode(p_criteria.getFilterExpression());
@@ -104,7 +105,14 @@ public final class Office365EventsDataGroupAdapter extends AbstractConnectorData
 
 		ClientEntitySet l_entitySet = l_response.getBody();
 
-		List<IConnectorRecord> l_records = _getDataRange(p_criteria.getFields(), l_entitySet);
+		FieldInfo l_fieldPK = RtCache.getPrimaryKeyFields(fieldInfo ->
+                getDataGroupGuid().equals(fieldInfo.getDataGroupGuid())).get(0);
+		IConnectorField l_fieldID = new Field(l_fieldPK.getGuid());
+		List<IConnectorField> allFields = new ArrayList<IConnectorField>();
+		allFields.addAll(p_criteria.getFields());
+		allFields.add(l_fieldID);
+
+		List<IConnectorRecord> l_records = _getDataRange(allFields, l_entitySet);
 		return new ConnectorQueryResult(l_records, l_records.size(), l_records.size());
 	}
 
