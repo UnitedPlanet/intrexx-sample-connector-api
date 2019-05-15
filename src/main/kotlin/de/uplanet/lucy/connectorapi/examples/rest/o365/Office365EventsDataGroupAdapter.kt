@@ -65,7 +65,7 @@ class Office365EventsDataGroupAdapter(p_ctx:               IProcessingContext,
                 "\$select=id,subject,body,bodyPreview,organizer,attendees,start,end," +
                 "location,webLink&" +
                 "\$top=20&" +
-                "\$filter=" + URIEncoder.encodeURIComponent(filter) + "&" +
+                "\$filter=${URIEncoder.encodeURIComponent(filter)}&" +
                 "\$orderby=${URIEncoder.encodeURIComponent("start/dateTime ASC")}")
                 .addHeader("accept", "application/json").build()
 
