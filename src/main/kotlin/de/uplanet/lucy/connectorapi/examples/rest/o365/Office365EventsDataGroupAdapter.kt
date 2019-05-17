@@ -73,10 +73,9 @@ class Office365EventsDataGroupAdapter(p_ctx:               IProcessingContext,
             // execute request
             val response = httpClient.execute(request)
 
-            // get response payload
-            val body = EntityUtils.toString(response.entity)
-
             if (response.statusLine.statusCode == 200) { // OK?
+                // get response payload
+                val body = EntityUtils.toString(response.entity)
                 // create event objects from response JSON
                 val result = parseEvents(body, p_queryCriteria.fields)
                 // create query result
