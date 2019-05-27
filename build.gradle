@@ -9,7 +9,7 @@ targetCompatibility = 11
 
 
 group   = 'de.uplanet.lucy'
-version = '9.2.0'
+version = '9.2.1'
 
 repositories
 {
@@ -31,9 +31,9 @@ dependencies
 {
 	implementation name: 'odata4j-0.8.0'
 	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.4.0'
-	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
-	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.5'
+	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.5.0'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'
+	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.7'
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 	implementation (group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.5.RELEASE') {
 		transitive = false
@@ -78,7 +78,11 @@ task startPortal (type: JavaExec) {
 	standardOutput = System.out
 	errorOutput = System.err
 
-	classpath = (sourceSets.main.runtimeClasspath + fileTree("${gradle.INTREXX_HOME}/lib"))
+classpath = (sourceSets.main.runtimeClasspath + 
+			 files("${gradle.INTREXX_HOME}/lib/update") + 
+			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib") +
+			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/standalone") +
+			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/custom"))
 
 	//doFirst {println classpath.join(',');println gradle.INTREXX_LOG4J_CFG}
 
