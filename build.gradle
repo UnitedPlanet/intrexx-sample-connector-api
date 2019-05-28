@@ -46,6 +46,7 @@ dependencies
 	api group: 'de.uplanet.lucy', name: 'ix-common',              version: version
 	api group: 'de.uplanet.lucy', name: 'ix-server',              version: version
 	api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: version
+	api group: 'de.uplanet.lucy', name: 'ix-connector-mfiles',    version: version
 	api group: 'de.uplanet.lucy', name: 'ix-auxiliaries',         version: version
 
 	testImplementation group: 'org.easymock',      name: 'easymock',             version: '3.5.1'
@@ -90,7 +91,7 @@ classpath = (sourceSets.main.runtimeClasspath +
 
 	jvmArgs '-Dfile.encoding=UTF-8'
 	jvmArgs "-Djava.library.path=${gradle.INTREXX_JRE_LIB_PATH}"
-	jvmArgs "-Dlog4j.configurationFile=file://${gradle.INTREXX_LOG4J_CFG}"
+	jvmArgs "-Dlog4j.configurationFile=${gradle.INTREXX_LOG4J_CFG}"
 	jvmArgs '-Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg'
 	jvmArgs '-Dcom.sun.management.jmxremote.port=9500'
 	jvmArgs '-Dcom.sun.management.jmxremote.authenticate=false'
