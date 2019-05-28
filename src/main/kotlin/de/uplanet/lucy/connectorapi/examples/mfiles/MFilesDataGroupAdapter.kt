@@ -76,10 +76,27 @@ class MFilesDataGroupAdapter(p_ctx: IProcessingContext,
         val l_session   = MFilesSession.get(properties, businessLogicProcessingContext)
         val l_service   = MFilesService.getInstance()
         val l_mfObjects = l_service.viewSearch(l_session, "V2/L2")
-        val l_records   = l_mfObjects.map { p_objVersion ->
+
+        var l_records   = l_mfObjects.map { p_objVersion ->
             val l_fields = mapPropsToFields(l_session, p_objVersion)
             Record(p_objVersion.objVer.id.toString(), l_fields)
         }.toList()
+
+        //sort by name if selected
+        val fieldName = p_queryCriteria.fields.firstOrNull{ p_field -> p_field.name == "name" }
+        val sortByInfo = p_queryCriteria.sortbyFields.firstOrNull { p_sort -> p_sort.fieldGuid == fieldName?.guid }
+        if (sortByInfo != null)
+        {
+            l_records = if (sortByInfo.isAscending) {
+                l_records.sortedBy { p_rec ->
+                    ValueHolderHelper.getStringFromVH(p_rec.getFieldByGuid(fieldName?.guid).value)
+                }
+            } else {
+                l_records.sortedByDescending { p_rec ->
+                    ValueHolderHelper.getStringFromVH(p_rec.getFieldByGuid(fieldName?.guid).value)
+                }
+            }
+        }
 
         return ConnectorQueryResult(l_records, l_records.size, l_records.size)
     }
