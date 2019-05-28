@@ -218,6 +218,9 @@ class MFilesDataGroupAdapter(p_ctx: IProcessingContext,
                             ValueHolderFactory.getValueHolder(p_objVersion.objVer.version.toLong())))
         l_fields.add(Field(getFieldGuidByPropName("classId"),
                             ValueHolderFactory.getValueHolder(p_objVersion.classId)))
+        l_fields.add(Field(getFieldGuidByPropName("objType"),
+                            ValueHolderFactory.getValueHolder(p_objVersion.objVer.type)))
+
 
         return l_fields
     }
