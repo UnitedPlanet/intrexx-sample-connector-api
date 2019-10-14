@@ -1,5 +1,5 @@
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+	id 'org.jetbrains.kotlin.jvm' version '1.3.50'
 }
 
 apply plugin: 'java-library'
@@ -9,7 +9,7 @@ targetCompatibility = 11
 
 
 group   = 'de.uplanet.lucy'
-version = '9.2.1'
+version = '9.2.6'
 
 repositories
 {
@@ -40,7 +40,7 @@ dependencies
 	}
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-	implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.30"
+	implementation "org.jetbrains.kotlin:kotlin-reflect"
 	implementation 'com.beust:klaxon:5.0.5'
 
 	api group: 'de.uplanet.lucy', name: 'ix-common',              version: version
@@ -72,6 +72,18 @@ jar {
 task copyDependencies(type: Copy) {
 	from configurations.default
 	into 'build/dependencies'
+}
+
+task deployToPortal(type: Copy) {
+	dependsOn ':copyDependencies'
+	from ('build/libs') {
+			include '*.jar'
+	}
+	from ('build/dependencies') {
+		include 'kotlin*.jar'
+		include 'klaxon*.jar'
+	}
+	into "$gradle.INTREXX_PORTAL_DIR/lib"
 }
 
 

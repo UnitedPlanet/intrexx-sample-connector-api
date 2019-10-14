@@ -191,6 +191,37 @@ The logic for the data access is implemented in the class `de.uplanet.lucy.conne
 
 Additional examples, which demonstrate access to REST web services via HTTP and OData, are available in the Java packages `de.uplanet.lucy.connectorapi.examples`. Intrexx filter, sorting and pagination functions are also used here. More detailed documentation for this can be found in the subdirectory `docs`.
 
+## Packaging and deployment
+
+In order to package and deploy your connector app to an Intrexx portal, follow these steps:
+
+1. There is a Gradle task `deployToPortal`, which when executed, will build and bundle all dependencies and your connector jar file and copies all files to the portal's lib folder. Please check the path to your portal folder in settings.gradle before executing the task.
+
+```shell
+./gradlew build
+./gradlew :deployToPortal
+```
+
+2. In order to include your jar files in the portal's Java classpath, the `internal/cfg/portal.wcf` file must be edited accordingly:
+
+```properties
+# Java Classpath (include wrapper.jar)  Add class path elements as
+#  needed starting from 1
+wrapper.java.classpath.1=C:\intrexx\lib\update
+wrapper.java.classpath.2=C:\intrexx\lib\*.jar
+wrapper.java.classpath.3=C:\intrexx\lib\remote\*.jar
+wrapper.java.classpath.4=C:\intrexx\org\portal\lib\*.jar
+```
+
+3. Copy the connector template you created in your development portal to the target portal.
+
+- Template file: `<INTREXX_PORTAL>/cfg/odata/connector/template/<YOUR_TEMPLATE_NAME>`
+- Optional concrete connector configuration file: `<INTREXX_PORTAL>/cfg/odata/connector/<YOUR_TEMPLATE_NAME>_<YOUR_CONNECTOR_CFG_NAME>.xml`
+
+4. Restart the target portal service and test/create a connector configuration based on your template.
+
+5. Import your application in the target portal and test it with your connector implementation.
+
 ## Java API documentation
 
 The Java API documentation of the Intrexx Connector API can be found in the `docs/api` directory of the project. All of the most important classes and interfaces are described there. Furthermore, all context objects (session, request etc.) are available at runtime just like in Intrexx Groovy scripts.
