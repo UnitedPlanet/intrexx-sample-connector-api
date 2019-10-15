@@ -75,7 +75,11 @@ task copyDependencies(type: Copy) {
 }
 
 task deployToPortal(type: Copy) {
+	dependsOn 'clean'
+	dependsOn 'build'
 	dependsOn ':copyDependencies'
+	tasks.findByName('build').mustRunAfter 'clean'
+ 	tasks.findByName('copyDependencies').mustRunAfter 'build'
 	from ('build/libs') {
 			include '*.jar'
 	}
