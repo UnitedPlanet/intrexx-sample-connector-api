@@ -9,7 +9,7 @@ targetCompatibility = 11
 
 
 group   = 'de.uplanet.lucy'
-version = '9.2.6'
+version = '9.2.8'
 
 repositories
 {

@@ -75,7 +75,21 @@ class MFilesDataGroupAdapter(p_ctx: IProcessingContext,
     override fun queryDataRange(p_queryCriteria: IConnectorQueryCriteria): IConnectorQueryResult {
         val l_session   = MFilesSession.get(properties, businessLogicProcessingContext)
         val l_service   = MFilesService.getInstance()
-        val l_mfObjects = l_service.viewSearch(l_session, "V2/L2")
+
+        val l_filterVisitor = MFilesFilterVisitor()
+        l_filterVisitor.visitNode(p_queryCriteria.getFilterExpression())
+
+        var l_filterValue : String?
+
+        //val l_startDate = l_filterVisitor.start.toString("yyyy-MM-dd'T'HH:mm:ss.sss")
+        //val l_endDate = l_filterVisitor.end.toString("yyyy-MM-dd'T'HH:mm:ss.sss")
+
+        val l_mfObjects = if (l_filterVisitor.filterValueString.isPresent) {
+            l_filterValue = l_filterVisitor.filterValueString.get()
+            l_service.quickSearch(l_session, l_filterValue)
+        } else {
+            l_service.viewSearch(l_session, "V2/L2")
+        }
 
         var l_records   = l_mfObjects.map { p_objVersion ->
             val l_fields = mapPropsToFields(l_session, p_objVersion)
