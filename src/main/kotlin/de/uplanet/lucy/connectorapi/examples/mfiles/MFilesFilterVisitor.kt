@@ -8,6 +8,7 @@ import org.odata4j.expression.*
 import java.util.*
 
 class MFilesFilterVisitor : PreOrderVisitor() {
+    val nameValuePairs = mutableListOf<Pair<String, Any>>()
     var lastPropertyName: Optional<String> = Optional.empty()
     var filterValueString : Optional<String> = Optional.empty()
     var filterValueLong : Optional<Long> = Optional.empty()
@@ -59,10 +60,12 @@ class MFilesFilterVisitor : PreOrderVisitor() {
 
     override fun visit(p0: DateTimeLiteral?) {
         filterValueDate = Optional.of(p0!!.value.toDate())
+        nameValuePairs.add(Pair(lastPropertyName.get(), filterValueDate.get()))
     }
 
     override fun visit(p0: DateTimeOffsetLiteral?) {
         filterValueDate = Optional.of(p0!!.value.toDate())
+        nameValuePairs.add(Pair(lastPropertyName.get(), filterValueDate.get()))
     }
 
     override fun visit(p0: DecimalLiteral?) {
@@ -123,10 +126,12 @@ class MFilesFilterVisitor : PreOrderVisitor() {
 
     override fun visit(p0: IntegralLiteral?) {
         filterValueLong = Optional.of(p0!!.value.toLong())
+        nameValuePairs.add(Pair(lastPropertyName.get(), filterValueLong.get()))
     }
 
     override fun visit(p0: Int64Literal?) {
         filterValueLong = Optional.of(p0!!.value)
+        nameValuePairs.add(Pair(lastPropertyName.get(), filterValueLong.get()))
     }
 
     override fun visit(p0: IsofExpression?) {
@@ -191,6 +196,7 @@ class MFilesFilterVisitor : PreOrderVisitor() {
 
     override fun visit(p0: StringLiteral?) {
         filterValueString = Optional.of(p0!!.value)
+        nameValuePairs.add(Pair(lastPropertyName.get(), filterValueString.get()))
     }
 
     override fun visit(p0: SubExpression?) {

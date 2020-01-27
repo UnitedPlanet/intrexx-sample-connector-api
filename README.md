@@ -13,8 +13,8 @@ The API is currently still in the preview stage. Please be aware that this has n
 
 ### Requirements
 
-- Intrexx 18.03 OU05, 18.09, 19.03
-- Java JDK 1.8 for Intrexx 18.03/18.09 or OpenJDK 11 for Intrexx 19.03.
+- Intrexx 19.09, 19.03 and 18.03 OU05
+- Java JDK 1.8 for Intrexx 18.03 or OpenJDK 11 for Intrexx 19.03/19.09.
 - Optionally, a Java IDE such as IntelliJ IDEA or Eclipse is recommended for developing custom connectors.
 
 ### Create project folder
@@ -85,7 +85,7 @@ The project contains three examples for accessing
 - MS Office365 appointments
 - SonarQube
 
-The examples for Google and Office365 require an OAuth2 configuration for authenticating to the service in the Intrexx portal. A description of how this can be configured is available in the [Intrexx Online Help](http://up-download.de/up/docs/intrexx-onlinehelp/8100/en/index.html?p=helpfiles/help.2.connectoren-office-365.html).
+The examples for Google and Office365 require an OAuth2 configuration for authenticating to the service in the Intrexx portal. A description of how this can be configured is available in the [Intrexx Online Help](https://onlinehelp.unitedplanet.com/intrexx/9200/de/index.html?p=helpfiles/help.2.connectoren-office-365.html).
 
 ## Create a custom connector project
 

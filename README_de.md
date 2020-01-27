@@ -12,8 +12,8 @@ Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beis
 
 ### Vorbedingungen
 
-- Intrexx 18.03 OU05, 18.09, 19.03
-- Java JDK 1.8 für Intrexx 18.03/18.09 oder OpenJDK 11 für Intrexx 19.03.
+- Intrexx 19.03, 18.03 ab OU05
+- Java JDK 1.8 für Intrexx 18.03 oder OpenJDK 11 für Intrexx ab 19.03.
 - Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
 
 ### Projektordner anlegen
@@ -85,7 +85,7 @@ Das Projekt enthält drei Beispiele für den Zugriff auf
 - MS Office365 Termine
 - SonarQube
 
-Die Beispiele für Google und Office365 benötigen eine OAuth2 Konfiguration für die Authentifizierung am Service im Intrexx Portal. Wie diese einzurichten ist, wird in der [Intrexx Online-Hilfe](http://up-download.de/up/docs/intrexx-onlinehelp/8100/de/index.html?p=helpfiles/help.2.connectoren-office-365.html) beschrieben.
+Die Beispiele für Google und Office365 benötigen eine OAuth2 Konfiguration für die Authentifizierung am Service im Intrexx Portal. Wie diese einzurichten ist, wird in der [Intrexx Online-Hilfe](https://onlinehelp.unitedplanet.com/intrexx/9200/de/index.html?p=helpfiles/help.2.connectoren-office-365.html) beschrieben.
 
 ## Eigenes Connector Projekt erstellen
 
