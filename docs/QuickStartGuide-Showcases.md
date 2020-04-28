@@ -1,16 +1,16 @@
-# Quick start guide for the Google Drive/Events Intrexx Connector API showcases
+# Intrexx Connector API - Quick start guide for the Google Drive/Events showcases
 
 ## 1. Installation
 
-1. clone the git repository
-2. build a jar
+1. Clone the git repository
+2. Build a jar
     * Open a terminal (bash/cmd)
     * CD into the git repository folder connector-api-examples
     * ```gradle clean build jar```
     * The jar will be created in connector-api-examples/build/libs/connector-showcases-8.1.x.jar
 3. Add the jar to your Intrexx 18.03 OU4 or 18.09 installation.
-    * Copy the jar into this folder: `<INTREXX-PORTAL>/lib`
-    * Modify the portal.wcf
+    * Copy the jar into this folder: `<INTREXX PORTAL>/lib`
+    * Modify the "portal.wcf" file
         * Add the following line under `wrapper.java.classpath.5=/opt/intrexx8100/org/<portalname>/lib/*.jar`
         ```bash
         # Java Classpath (include wrapper.jar)  Add class path elements as
@@ -20,11 +20,11 @@
         wrapper.java.classpath.3=/opt/intrexx/lib/remote/*.jar
         wrapper.java.classpath.4=/opt/intrexx/derby/lib/*.jar
         ```
-4. Follow the instructions for "Google Drive Datagroup", "Google Drive Filedatagroup", "Google Calendar Datagroup", "Office 365 Datagroup".
+4. Follow the instructions for "Google Drive data group", "Google Drive file data group", "Google Calendar data group", "Office 365 data group".
 
-## 2. The Connector API Configuration
+## 2. Connector API configuration
 
-For a new Connector two configuration files are required. The first one is a template for your connector instances. The second file is the configuration for the connector instance.
+Two configuration files are required for a new connector. The first file is a template for your connector instances, the second is the configuration for the connector instance.
 
 Folder path for the configuration template file:
 
@@ -59,44 +59,45 @@ Folder path for the configuration file:
 </connector>
 ```
 
-## 3 Google Drive Datagroup Example
+## 3 Google Drive data group example
 
-This chapter describes how Intrexx can access your Google Drive Account. The connector consumes the Google Drive REST API via HTTP.
+This chapter describes how Intrexx can access your Google Drive account. The connector consumes the Google Drive REST API via HTTP.
 
 ### 3.1 Create OAuth2 credentials for your Google account
 
-For authentication with Google the OAuth2 protocol is used. So we have to register Intrexx with your Google Account as an application.
+The OAuth2 protocol is used to authenticate with Google. So, we have to register Intrexx as an application in your Google account.
 
 1. Go to:
     ```URL
     https://console.developers.google.com/apis/
     ```
-2. Open Credentials
-3. Click "Add Credentials"
-4. Click "OAuth-Client-ID"
-5. Select "Web Application"
+2. Open "Credentials"
+3. Click on "Create Credentials"
+4. Click on "OAuth client ID"
+5. Select "Web application"
     * Redirect-URL: ```https://<yourPortalURL>/oauth2```
-6. Click Next
-7. Save client-ID and client secret.
-8. Create a Google Drive Connector configuration
+6. Click on "Next"
+7. Save the client ID and client secret.
+8. Create a Google Drive connector configuration
 
-### 3.2 Google Drive Connector API configuration
+### 3.2 Google Drive connector API configuration
 
-Create an new XML file with the following xml content.
+Create a new XML file with the following content.
+
 Replace:
 
 * ```####YOUR_CLIENT_ID####``` with the Google OAuth2 client ID
 * ```####YOUR_CLIENT_SECRET####``` with the Google OAuth2 client secret
-* ```####ID_OF YOUR_FOLDER####``` with the item id of the Google Drive Folder***
+* ```####ID_OF YOUR_FOLDER####``` with the item ID of the Google Drive folder***
 
-*folder id*
-To get the item ID of a folder you can use this website: []("https://developers.google.com/drive/api/v3/reference/files/list)
+*Folder ID*
+The following website helps you get the item ID of a folder: []("https://developers.google.com/drive/api/v3/reference/files/list)
 
-There you can execute REST requests using your Google account. The JSON response contains all files and folders as items. Search for your folder and add the "id" to your configuration.
+There, you can execute REST requests using your Google account. The JSON response contains all files and folders as items. Search for your folder and add the "ID" to your configuration.
 
-### 3.3 The configuration File `<IntrexxPortal>/intrenal/cfg/odata/connector`
+### 3.3 Configuration file `<Intrexx Portal>/intrenal/cfg/odata/connector`
 
-The file must begin with the template name and ends with the id of the connector.
+The file must begin with the template name and end with the ID of the connector.
 
 **Pattern:** `<TemplateName>_<ConnectorId>.xml`
 
@@ -104,18 +105,18 @@ The file must begin with the template name and ends with the id of the connector
 
 **Description of the configuration file:**
 
-* guid: A random GUID as identifier for your connector.
+* guid: A random GUID as an identifier for your connector.
 * connectorId: Unique identifier for your connector (as defined in the template).
 * properties: Expert settings the implementation can access.
     ** oauth2.*: Information needed for authentication with the Google Rest API
-    ** guid: A GUID for the connector configuration as identifier
-* datagroups: Defines the datagroups the connector will offer
-    ** datagroup: Define the datagroup for the connector
-        *** fields: Define the fields the datagroup will offer
-            **** field: Define the data fields of the datagroup
+    ** guid: A GUID for the connector configuration as an identifier
+* dataGroups: Defines which data groups are available
+    ** dataGroup: Define the specific data group(s) for the connector
+        *** fields: Defines which fields of the data group are available
+            **** field: Defines the specific data fields of the data group
 
-    ** settings: define settings for the datagroup
-    *** connector.dataGroup.adapter.class: Define the class implementing the IConnectorDataGroupAdapter interface.
+    ** settings: Defines settings for the data group
+    *** connector.dataGroup.adapter.class: Defines the class, implementing the "IConnectorDataGroupAdapter" interface.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -137,7 +138,7 @@ The file must begin with the template name and ends with the id of the connector
         <property name="oauth2.clientSecret" value="####YOUR_CLIENT_SECRET####" description=""/>
         <property name="oauth2.scope.source" value="STATIC" description=""/>
         <property name="oauth2.scope" value="https://www.googleapis.com/auth/drive" description=""/>
-        <property name="oauth2.redirectUri" value="http://localhost:1337/service/oauth2/authorize" description=""/>
+        <property name="oauth2.redirectUri" value="http://localhost:8082/office365/oauth2" description=""/>
         <property name="oauth2.clientAuthenticationScheme" value="form" description=""/>
         <property name="oauth2.authenticationScheme" value="header" description=""/>
 
@@ -201,36 +202,36 @@ The file must begin with the template name and ends with the id of the connector
 </connector>
 ```
 
-### 3.4 Create Google Drive app - foreign datagoup
+### 3.4 Create Google Drive app - External data group
 
 Before the Connector API configuration is available, the portal server must be restarted.
 
 1. Create an empty application.
-2. Delete the datagroup.
+2. Delete the existing data group.
 3. Add an external data group.
-4. Choose testconnector_googledrive as database connection.
-5. Datahandler should be "Connector Handler - Datahandler", if not please check the "Troubleshooting - Missing Connector BIA-CFG" chapter.
+4. Select "testconnector_googledrive" as the database connection.
+5. The "Datahandler" should be "Connector Handler - Datahandler", if not please see "Troubleshooting - Missing connector BIA-CFG".
 6. Search for a table with "*".
-7. Choose CONNECTOR_API.GoogleDrive.
-8. Switch to data field tab.
-9. Choose the data field you need.
-    * The id is a primary key field and required
-10. Add a viewtable to your page.
-11. Add the fields to your table.
-    * ThumbnailLink: change control type to image url.
-    * WebviewLink: change to URL.
-    * Don't add the fileupload field. It is only requierd for the upload page.
+7. Choose "CONNECTOR_API.GoogleDrive".
+8. Go to the "Data fields" tab.
+9. Choose the data field(s) you need.
+    * The ID is a primary key field and required.
+10. Add a view table to your page.
+11. Add the field(s) to your table.
+    * Thumbnail link: change control type to "Image URL".
+    * Webview link: change control type to "URL".
+    * Don't add the "fileupload" field. It is only required for the upload page.
 12. Save the application.
 13. Now the application can display your files from Google Drive.
 
-### 3.5 Create Google Drive App - Fileupload
+### 3.5 Create Google Drive App - File upload
 
-1. Open your Google Drive App.
-2. Add under your Google Drive external data group an edit page (you can use the page wizard).
-   * Add only the fields "id", "name", "description" and "fileupload".
-3. Save the application, after save move the field "id" into the "hidden area".
-4. Go into Google Drive external data group and copy the GUID from name data field.
-5. Go into Google Drive external data group and open the expert settings of the file upload data field.
+1. Open your Google Drive app.
+2. Add an edit page (you can use the page wizard) under your Google Drive external data group.
+   * Only add the following fields: "id", "name", "description" and "fileupload".
+3. Save the application. After saving, move the "id" field to the "Hidden area".
+4. Open the properties of the Google Drive external data group and copy the GUID of the "name" data field.
+5. Open the properties of the Google Drive external data group and open the expert settings of the "fileupload" data field.
     * Add "Name GUID" expert setting:
         * Key = `connector.google.drive.name.guid`
         * Value = GUID from "name" data field.
@@ -240,39 +241,39 @@ Before the Connector API configuration is available, the portal server must be r
     * Add "ParentId" expert flag:
         * Key: `connector.google.drive.parentId`
         * Value = ID of your Google Drive Folder.
-6. Open the settings of the "Save Button" and edit the "Link destination" in the action tab.
-    * Select as destination the page with the view table.
+6. Open the properties of the "Save" button and edit the "Link destination" on the "Actions" tab.
+    * Select the page with the view table as the destination.
 7. Add the edit page to your application menu.
-    1. Open application -> properties
-    2. Application menu tab
-    3. Switch "Edit page" from available pages to selected pages.
+    1. Open the application properties
+    2. Go to the "Application menu" tab
+    3. Move the "Edit page" from available pages to selected pages.
 8. Save your application.
 
-### 3.6 Create Google Drive App - Edit/Delete Page
+### 3.6 Create Google Drive app - Edit/delete page
 
-For editing or deleting records, use the upload page.
+Use the upload page for editing or deleting records.
 
-1. Open properties of view table.
+1. Open the properties of the view table.
 2. Add a button.
-3. Open action tab and select your upload page as destination.
+3. Go to the "Actions" tab and select your upload page as the destination.
 4. Save your application.
 
-## 4. Example Google Drive Calendar
+## 4. Google Drive Calendar example
 
-In this Chapter we will explain how Intrexx can access your Google Calendar account.
+In this chapter, we will explain how Intrexx can access your Google Calendar account.
 The Connector API consumes the Google Calendar API.
 
-### 4.1 Create OAuth2 credentials in your Google Account
+### 4.1 Create OAuth2 credentials in your Google account
 
 See chapter 3.1.
 
-### 4.2 Google Calendar Connector API configuration
+### 4.2 Google Calendar connector API configuration
 
-Create an new XML file with the following xml content.
+Create a new XML file with the following content.
 Replace:
 
-* ```####YOUR_CLIENT_ID####``` with the Google OAuth2 Client Id
-* ```####YOUR_CLIENT_SECRET####``` with the Google OAuth2 Client Secret
+* ```####YOUR_CLIENT_ID####``` with the Google OAuth2 client ID
+* ```####YOUR_CLIENT_SECRET####``` with the Google OAuth2 client secret
 
 ```XML
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -294,7 +295,7 @@ Replace:
         <property name="oauth2.clientSecret" value="###YOUR CLIENT SECRET###" description=""/>
         <property name="oauth2.scope.source" value="STATIC" description=""/>
         <property name="oauth2.scope" value="https://www.googleapis.com/auth/calendar" description=""/>
-        <property name="oauth2.redirectUri" value="http://localhost:1337/service/oauth2/authorize" description=""/>
+        <property name="oauth2.redirectUri" value="http://localhost:8082/office365/oauth2" description=""/>
         <property name="oauth2.clientAuthenticationScheme" value="form" description=""/>
         <property name="oauth2.authenticationScheme" value="header" description=""/>
         <property name="guid" value="testconnector_googlecalendar" description=""/>
@@ -336,41 +337,41 @@ Replace:
 
 ### 4.3 Create Google Calendar app - View your events
 
-Before the application can use the Google Calendar connector, we need to restart the portal server.
+Before the application can use the Google Calendar connector, you need to restart the portal server.
 
 1. Create an empty application.
-2. Delete datagroup.
-3. Create external data group.
-4. Select testconnector_googlecalendar as connection.
-5. Datahandler should be "Connector Handler - Datahandler", if not please check the "Troubleshooting - Missing Connector BIA-CFG" chapter.
-6. Search for Table with "*".
-7. Choose CONNECTOR_API.CONNECTOR_API.GoogleEvents.
-8. Switch to datafield tab.
-9. Choose all data fields.
-10. Open expert tab.
-    * Add setting:
+2. Delete the existing data group.
+3. Add an external data group.
+4. Select "testconnector_googlecalendar" as the database connection.
+5. The "Datahandler" should be "Connector Handler - Datahandler", if not please see "Troubleshooting - Missing connector BIA-CFG".
+6. Search for tables with "*".
+7. Choose "CONNECTOR_API.CONNECTOR_API.GoogleEvents".
+8. Go to the "Data fields" tab.
+9. Choose all the data fields.
+10. Go to the "Expert" tab.
+    * Add the following setting:
         * Key: `connector.google.calendar.id`
         * Value: `primary` (or add your calendar id)
-11. Add a calendar control on your page.
-12. Open the calendar.
-13. Add new plugin.
+11. Add a calendar control to your page.
+12. Open the calendar properties.
+13. Add a new plugin.
     * Select your calendar data group.
-    * Add an additional field for the id field.
+    * Add an additional field for the "id" field.
 14. Save the application.
-15. Now the app should show your google events in the browser.
+15. Now the app should show your Google events in the browser.
 
 ### 4.4 Create Google Calendar app - Create/modify events
 
-1. Create under your external data group a new edit page.
+1. Create a new edit page under your external data group.
     * Use the page wizard.
-    * Select all data fields excluding WebUrl.
-    * Move ID to the hidden area.
-2. Go to save button and change link destination to your calendar page.
-3. Go to your calender view -> open your plugin.
-    * Open tab "Link destination".
-    * Select in "Link on click": edit page.
-4. Open "Actions" tab of calendar view.
-    * Edit highlight action.
+    * Select all the data fields excluding "WebUrl".
+    * Move "ID" to the hidden area.
+2. Open the properties of the "Save" button and change the link destination to your calendar page.
+3. Open the calendar properties -> Open the plugin properties.
+    * Go to the "Link destination" tab.
+    * Select the edit page you just created for "Link on click".
+4. Go to the "Actions" tab of the calendar.
+    * Edit the "Highlight action".
     * Jump: To a page of an application.
     * Application: Current application.
     * Select your edit page.
@@ -380,19 +381,11 @@ Now you can create and edit events in your Google calendar.
 
 ## 5. Troubleshooting
 
-### 5.1 Missing Connector BIA-CFG
+### 5.1 Missing connector BIA-CFG
 
-If the datahander field in the foreign datagroup configuration dialog is empty then the `bia-config.cfg` file is missing.
+If the "Datahandler" field in the external data group configuration dialog is blank then the `bia-config.cfg` file is missing.
 
-1. Proove that the Portal version is at least 18.03 OU04.
+1. Check that your Portal Manager version is at least 18.03 OU04.
 2. Go to `<INTREXX-INSTALL>/orgtempl/blank/internal/cfg/biaconfig` and copy the `bia_connector.cfg` file.
-3. Paste the `bia_connector.cfg` into your portal's `<INTREXX-PORTAL>/internal/cfg/biaconfig` folder.
+3. Paste the `bia_connector.cfg` into your portal's `<INTREXX PORTAL>/internal/cfg/biaconfig` folder.
 4. Restart the portal server.
-
-### 5.2 New Redirect URL since version 18.09
-
-Change the redirect URL from ```http://<portal>/oauth2``` to ```http://<portal>/service/oauth2/authorize```.
-
-Example:<br>
-v18.03: ```http://localhost:8082/test/oauth2```<br>
-v18.09: ```http://localhost:1337/service/oauth2/authorize```
