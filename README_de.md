@@ -2,11 +2,9 @@
 
 ## Einführung
 
-Die Intrexx Connector API definiert eine Java API, um eigene Intrexx Connectoren zu implementieren, die externe Daten in Intrexx über eine Fremddatengruppe bereitstellen. Dabei gibt die API im Wesentlichen zwei Java Interfaces vor, die vom Entwickler zu implementieren sind und Datensätze und Dateien im externen System erstellen, lesen, aktualisieren und löschen (sog. CRUD Aktionen). Des Weiteren wird in der Connector Konfigurationsdatei ein Metadaten-Modell hinterlegt, das die Struktur der Datengruppen (Felder, Beziehungen, Settings) beschreibt, die von der Connector Implementierung bereitgestellt werden. Zur Laufzeit bietet die Connector-API vorkonfigurierte Klienten für HTTP und OData Anfragen, welche automatisch eine Authentifizierung des Benutzers - sofern vom Service benötigt - via HTTP Basic Auth oder OAuth2 durchführen. Ansonsten lassen sich beliebige Java Bibliotheken (z.B. JDBC, REST APIs, etc.) im eigenen Code verwenden.
+Die Intrexx Connector API definiert eine Java API, um eigene Intrexx Connectoren zu implementieren, die externe Daten in Intrexx über Fremddatengruppen bereitstellen. Dabei gibt die API im Wesentlichen zwei Java Interfaces vor, die vom Entwickler zu implementieren sind, um Datensätze und Dateien im externen System zu erstellen, lesen, aktualisieren und löschen (sog. CRUD Aktionen). Des Weiteren wird in der Connector Konfigurationsdatei ein Metadaten-Modell hinterlegt, das Datengruppen (Felder, Beziehungen, Konfiguration) beschreibt, die von der Connector Implementierung bereitgestellt werden. Zur Laufzeit bietet die Connector-API vorkonfigurierte Java APIs für HTTP und OData Anfragen, welche automatisch eine Authentifizierung des Benutzers - sofern vom Service benötigt - via HTTP Basic Auth oder OAuth2 durchführen. Ansonsten lassen sich beliebige Java Bibliotheken (z.B. JDBC, REST APIs, etc.) in eigenem Code verwenden.
 
 Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beispiel-Implementierungen beschrieben, die den Einsatz der API zur Anbindung von Fremdsystemen in Intrexx verdeutlichen.
-
-*HINWEIS*: Die API befindet sich derzeit noch in einer Preview-Version. Bitte beachten Sie, dass diese für produktive Einsätze noch nicht freigegeben ist und sich bis zur finalen Freigabe noch Änderungen an der API ergeben können, die in eigenen Projekten nachgezogen werden müssen. Diese Anpassungen sollten aber nur geringfügig ausfallen.
 
 ## Einrichtung der Entwicklungsumgebung
 

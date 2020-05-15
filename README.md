@@ -6,9 +6,6 @@ The Intrexx Connector API defines a Java API to implement custom Intrexx connect
 
 To make a quick start into development with the connector, the following provides a description of example implementations that demonstrate the use of the API for integrating external systems in Intrexx.
 
-*Please note*:
-The API is currently still in the preview stage. Please be aware that this has not been released for productive implementation and that changes may be made to the API before the final release. These changes may need to be applied to custom projects. However, these adjustments should only be minor.
-
 ## Configure the development environment
 
 ### Requirements
