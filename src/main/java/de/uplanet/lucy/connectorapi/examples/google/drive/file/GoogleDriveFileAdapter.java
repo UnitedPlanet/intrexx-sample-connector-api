@@ -6,8 +6,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
@@ -363,6 +365,9 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		final String l_strContent;
 		final String l_strMetaData;
 		final Date l_dtModified;
+		final Map<String, String> l_metaValues;
+
+		l_metaValues = new HashMap<>();
 
 		if (p_strFileName == null)
 			throw new IllegalArgumentException("Cannot create file descriptor. Add the file name field to the page.");
@@ -373,16 +378,20 @@ public final class GoogleDriveFileAdapter extends AbstractConnectorFileAdapter
 		l_strName     = p_strFileName;
 		l_strUrl      = p_strFileName;
 		l_strContent  = ContentTypeUtil.contentTypeFromFileName(p_strFileName);
-		l_strMetaData = "fileSize= " + p_lSize;
 
 		if (p_dtModified != null)
 			l_dtModified = p_dtModified;
 		else
 			l_dtModified = new Date();
 
-		final FileMetaInfo l_fileInfo = FileMetaInfo.fromString(l_strMetaData);
-		l_fileInfo.setValue("weburl", p_strWebUrl);
-		l_fileInfo.setValue("downloadurl", p_strDownloadUrl);
+		FileMetaInfo.setFileSize(l_metaValues, p_lSize);
+		FileMetaInfo.setValue(l_metaValues, "weburl", p_strWebUrl);
+		FileMetaInfo.setValue(l_metaValues, "downloadurl", p_strDownloadUrl);
+
+		if (l_strContent.contains("image"))
+			FileMetaInfo.setImage(l_metaValues, true);
+
+		final FileMetaInfo l_fileInfo = new FileMetaInfo(l_metaValues);
 
 		final IVHFileAdapterDescriptor l_desc;
 
