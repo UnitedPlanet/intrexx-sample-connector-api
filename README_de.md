@@ -10,8 +10,8 @@ Für einen schnellen Start in die Connector Entwicklung werden im Folgenden Beis
 
 ### Vorbedingungen
 
-- Intrexx 19.03, 21.03, 21.09
-- Java JDK 1.8 für Intrexx 18.03 oder OpenJDK 11/16 für Intrexx ab 19.03/21.03.
+- Intrexx 21.03 oder Steady Track
+- Java 11 oder 17
 - Optional wird für die Entwicklung eigener Connectoren eine IDE wie z.B. Eclipse Java IDE oder IntelliJ IDEA empfohlen.
 
 ### Projektordner anlegen

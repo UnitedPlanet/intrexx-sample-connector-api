@@ -10,8 +10,8 @@ To make a quick start into development with the connector, the following provide
 
 ### Requirements
 
-- Intrexx 19.03, 21.03, 21.09
-- Java JDK 1.8 for Intrexx 18.03 or OpenJDK 11/16 for Intrexx 19.03/21.03.
+- Intrexx 21.03 or Steady Track
+- OpenJDK 11 or 17
 - Optionally, a Java IDE such as IntelliJ IDEA or Eclipse is recommended for developing custom connectors.
 
 ### Create project folder
