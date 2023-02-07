@@ -13,7 +13,7 @@ compileKotlin {
 }
 
 group   = 'de.uplanet.lucy'
-version = '10.0.12'
+version = '10.0.20'
 
 repositories
 {
@@ -36,10 +36,10 @@ dependencies
 	implementation name: 'odata4j-0.8.0'
 	implementation name: 'up-json-simple-1.1.9'
 	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.7.1'
+	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.9.0'
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
-	implementation (group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.0.RELEASE') {
+	implementation (group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.14') {
 		transitive = false
 	}
 
