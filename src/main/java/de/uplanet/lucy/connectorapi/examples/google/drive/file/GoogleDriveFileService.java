@@ -44,6 +44,7 @@ import de.uplanet.util.Preconditions;
 import de.uplanet.util.URIEncoder;
 
 
+@SuppressWarnings("deprecation")
 public class GoogleDriveFileService
 {
 	private static final String ms_rootUri = "https://www.googleapis.com/drive/v3/files/";
@@ -489,7 +490,7 @@ public class GoogleDriveFileService
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+
 	private String _getDriveItemJSON(String p_name, String p_parentId, String p_mimeType)
 	{
 		JSONObject l_obj = new JSONObject();
