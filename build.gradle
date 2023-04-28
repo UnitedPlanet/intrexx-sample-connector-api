@@ -17,21 +17,16 @@ repositories
 {
 	mavenCentral()
 
-	maven
-	{
-		url 'https://artifactory.dev.unitedplanet.com/artifactory/intrexx-public/'
-	}
-
 	flatDir
 	{
-		dirs 'lib'
+		dirs "${gradle.INTREXX_HOME}/lib"
 	}
 }
 
 
 dependencies
 {
-	implementation name: 'odata4j-0.8.0'
+	implementation name: 'odata4j-fat-0.8.0'
 	implementation name: 'up-json-simple-1.1.9'
 	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
 	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.9.0'
