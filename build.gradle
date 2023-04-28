@@ -11,15 +11,15 @@ kotlin {
 }
 
 group   = 'de.uplanet.lucy'
-version = '10.16.0'
+version = '11.0.0'
 
 repositories
 {
-	 mavenCentral()
+	mavenCentral()
 
 	maven
 	{
-		url 'https://maven.unitedplanet.com'
+		url 'https://artifactory.dev.unitedplanet.com/ui/native/intrexx-public/'
 	}
 
 	flatDir
@@ -46,11 +46,9 @@ dependencies
 	implementation group: 'com.beust', name: 'klaxon', version: '5.6'
 
 
-	api group: 'de.uplanet.lucy', name: 'ix-common',              version: version
-	api group: 'de.uplanet.lucy', name: 'ix-server',              version: version
-	api group: 'de.uplanet.lucy', name: 'ix-connector-office365', version: version
-	api group: 'de.uplanet.lucy', name: 'ix-connector-mfiles',    version: version
-	api group: 'de.uplanet.lucy', name: 'ix-auxiliaries',         version: version
+	api group: 'de.uplanet.lucy', name: 'ix-common',  version: version 
+	api group: 'de.uplanet.lucy', name: 'ix-server', version: version 
+	api group: 'de.uplanet.lucy', name: 'ix-auxiliaries', version: version 
 
 	testImplementation group: 'org.easymock',      name: 'easymock',             version: '4.3'
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api',    version: '5.8.2'
