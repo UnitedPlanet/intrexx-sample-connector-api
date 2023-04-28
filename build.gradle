@@ -19,7 +19,7 @@ repositories
 
 	maven
 	{
-		url 'https://artifactory.dev.unitedplanet.com/ui/native/intrexx-public/'
+		url 'https://artifactory.dev.unitedplanet.com/artifactory/intrexx-public/'
 	}
 
 	flatDir
@@ -45,10 +45,17 @@ dependencies
 	implementation "org.jetbrains.kotlin:kotlin-reflect"	
 	implementation group: 'com.beust', name: 'klaxon', version: '5.6'
 
+	implementation group: 'de.uplanet.lucy', name: 'ix-common',  version: version {
+		transitive = false
+	}
 
-	api group: 'de.uplanet.lucy', name: 'ix-common',  version: version 
-	api group: 'de.uplanet.lucy', name: 'ix-server', version: version 
-	api group: 'de.uplanet.lucy', name: 'ix-auxiliaries', version: version 
+	implementation group: 'de.uplanet.lucy', name: 'ix-server', version: version {
+		transitive = false
+	}
+
+	implementation group: 'de.uplanet.lucy', name: 'ix-auxiliaries', version: version {
+		transitive = false
+	}
 
 	testImplementation group: 'org.easymock',      name: 'easymock',             version: '4.3'
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api',    version: '5.8.2'
