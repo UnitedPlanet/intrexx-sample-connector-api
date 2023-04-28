@@ -32,7 +32,7 @@ dependencies
 	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.9.0'
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
-	implementation (group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.0.RELEASE') {
+	implementation (group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.2.RELEASE') {
 		transitive = false
 	}
 
