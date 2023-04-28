@@ -28,7 +28,7 @@ dependencies
 {
 	implementation name: 'odata4j-fat-0.8.0'
 	implementation name: 'up-json-simple-1.1.9'
-	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+	implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.6'
 	implementation group: 'org.apache.olingo', name: 'odata-client-core', version: '4.9.0'
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
@@ -99,7 +99,6 @@ task startPortal (type: JavaExec) {
 	errorOutput = System.err
 
 classpath = (sourceSets.main.runtimeClasspath + 
-			 files("${gradle.INTREXX_HOME}/lib/update") + 
 			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib") +
 			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/standalone") +
 			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/custom"))
@@ -109,6 +108,8 @@ classpath = (sourceSets.main.runtimeClasspath +
 	mainClass = 'de.uplanet.lucy.server.portalserver.PortalService'
 
 	jvmArgs '-Dfile.encoding=UTF-8'
+	jvmArgs '-Djava.locale.providers=COMPAT,SPI'
+    jvmArgs '-Dgroovy.source.encoding=UTF-8'
 	jvmArgs "-Djava.library.path=${gradle.INTREXX_JRE_LIB_PATH}"
 	jvmArgs "-Dlog4j.configurationFile=${gradle.INTREXX_LOG4J_CFG}"
 	jvmArgs '-Djava.security.auth.login.config=file:internal/cfg/LucyAuth.cfg'
@@ -121,7 +122,6 @@ classpath = (sourceSets.main.runtimeClasspath +
 	jvmArgs '-Djava.net.preferIPv4Stack=true'
 	jvmArgs '-Dde.uplanet.lucy.server.composer.ixservlet.debug.json=true'
 	jvmArgs '-Dde.uplanet.jdbc.trace=false'
-	jvmArgs '--illegal-access=permit'
 	environment ([INTREXX_HOME: gradle.INTREXX_HOME])
 	workingDir gradle.INTREXX_PORTAL_DIR
 }
