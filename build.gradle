@@ -1,17 +1,17 @@
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+	id 'org.jetbrains.kotlin.jvm' version '2.0.20'
 }
 
 apply plugin: 'java-library'
 
 kotlin {
 	jvmToolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
 }
 
 group   = 'de.uplanet.lucy'
-version = '11.0.0'
+version = '12.0.0'
 
 repositories
 {
@@ -101,12 +101,13 @@ task startPortal (type: JavaExec) {
 classpath = (sourceSets.main.runtimeClasspath + 
 			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib") +
 			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/standalone") +
-			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/custom"))
+			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/custom") +
+			 fileTree(include: ['*.jar'], dir: "${gradle.INTREXX_HOME}/lib/extensions"))
 
 	//doFirst {println classpath.join(',');println gradle.INTREXX_LOG4J_CFG}
 
 	mainClass = 'de.uplanet.lucy.server.portalserver.PortalService'
-
+	jvmArgs '-server'
 	jvmArgs '-Dfile.encoding=UTF-8'
 	jvmArgs '-Djava.locale.providers=COMPAT,SPI'
     jvmArgs '-Dgroovy.source.encoding=UTF-8'
@@ -119,6 +120,8 @@ classpath = (sourceSets.main.runtimeClasspath +
 	jvmArgs '-Xms512m'
 	jvmArgs '-Xmx1024m'
 	jvmArgs '-Djava.io.tmpdir=internal/tmp'
+	jvmArgs "-Dde.uplanet.lucy.logPath=${gradle.ext.INTREXX_PORTAL_DIR}/log"
+	jvmArgs '-Djava.xml.config.file=internal/cfg/jaxp.properties' 
 	jvmArgs '-Djava.net.preferIPv4Stack=true'
 	jvmArgs '-Dde.uplanet.lucy.server.composer.ixservlet.debug.json=true'
 	jvmArgs '-Dde.uplanet.jdbc.trace=false'
